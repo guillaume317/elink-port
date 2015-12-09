@@ -1,0 +1,43 @@
+<section class="canevas">
+
+    <md-toolbar>
+        <div class="md-toolbar-tools" layout-align="space-around center">
+
+            <md-select ng-model="filter.category">
+                <md-option value="">{{'view.cercle.toutes' | translate}}</md-option>
+                <md-option ng-repeat="cat in categories" value="{{cat}}">
+                    {{cat}}
+                </md-option>
+            </md-select>
+
+            <md-select ng-model="cercle" ng-click="changeCercle(cercle)">
+                <md-option ng-repeat="aCercle in cercles" value="{{aCercle}}">
+                    {{aCercle}}
+                </md-option>
+            </md-select>
+        </div>
+      </md-toolbar>
+
+
+    <md-divider></md-divider>
+
+    <div ng-hide="allLiens.items[0]" class="errormessage warning" translate="list.empty"></div>
+
+    <md-list>
+        <md-list-item ng-repeat="lien in allLiens.items | filter:filter.category | orderBy: order " >
+            <div flex="auto" class="md-list-item-text" layout="column">
+                <h2>{{lien.title}}</h2>
+                {{lien.teasing}}
+                <div  layout="row">
+                    <span flex="15"><b>{{lien.category}}</b></span>
+                    <span flex="15"><ng-md-icon icon="account_child"></ng-md-icon>{{lien.sharedBy}}</span>
+                    <span flex="auto"> <a ng-href="{{lien.url}}" target="_blank">{{lien.url}}</a> </span>
+                </div>
+            </div>
+            <div flex="initial" layout="row">
+                <md-button class="md-icon-button" ng-click="read(lien)" aria-label="{{'view.action.read' | translate}}"><ng-md-icon icon="archive" size="30" ></ng-md-icon> <md-tooltip>{{'view.action.read' | translate}}</md-tooltip></md-button>
+            </div>
+        </md-list-item>
+    </md-list>
+
+</section>

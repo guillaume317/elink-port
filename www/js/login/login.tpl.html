@@ -1,0 +1,21 @@
+<ion-view view-title="Login" align-title="left">
+  <ion-content style="background: url(img/login.jpg) center; background-size: cover;">
+    <div class="hero no-header flat">
+      <div class="content">
+        <div class="app-icon"></div>
+        <h1>eLink</h1>
+      </div>
+    </div>
+    <div class="list">
+      <ion-md-input ng-model="credentials.username" placeholder="Username" highlight-color="balanced" type="text"></ion-md-input>
+      <ion-md-input ng-model="credentials.password" placeholder="Password" highlight-color="energized" type="password"></ion-md-input>
+    </div>
+    <div class="padding">
+      <button ng-click="login()" class="button button-full button-assertive ink">Login</button>
+    </div>
+    <div class="button-bar social-login">
+     <button class="button button-small button-border icon-left ion-social-twitter button-calm-900">Twitter</button>
+
+    </div>
+  </ion-content>
+</ion-view>

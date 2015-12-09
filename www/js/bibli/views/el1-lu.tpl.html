@@ -1,0 +1,21 @@
+<section class="canevas">
+    <cdc-alert-error></cdc-alert-error>
+
+    <div ng-hide="allLiens.items[0]" class="errormessage warning" translate="list.empty"></div>
+
+    <md-list>
+        <md-list-item ng-repeat="lien in allLiens.items | orderBy: order " >
+            <div flex="auto" class="md-list-item-text" layout="column">
+                <h2>{{lien.title}}</h2>
+                {{lien.teasing}}
+                <a ng-href="{{lien.url}}" target="_blank">{{lien.url}}</a>
+            </div>
+            <div flex="initial" layout="row">
+                <md-button class="md-icon-button" ng-click="delete(lien)" aria-label="{{'view.action.delete' | translate}}"><ng-md-icon icon="delete" size="30" ></ng-md-icon> <md-tooltip>{{'view.action.delete' | translate}}</md-tooltip></md-button>
+                <md-button class="md-icon-button" ng-click="unread(lien)" aria-label="{{'view.action.unread' | translate}}"><ng-md-icon icon="markunread" size="30" ></ng-md-icon> <md-tooltip>{{'view.action.unread' | translate}}</md-tooltip></md-button>
+                <md-button class="md-icon-button" ng-show="canShare()" ng-click="share($event, lien)" aria-label="{{'view.action.share' | translate}}"><ng-md-icon icon="share" size="30"></ng-md-icon> <md-tooltip>{{'view.action.share' | translate}}</md-tooltip></md-button>
+            </div>
+        </md-list-item>
+    </md-list>
+
+</section>

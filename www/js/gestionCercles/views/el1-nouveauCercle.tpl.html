@@ -1,0 +1,35 @@
+
+<md-dialog aria-label="{{'view.nouveauLien.title' | translate}}" ng-cloak flex="50">
+
+    <form name="currentForm">
+
+        <md-toolbar>
+            <div class="md-toolbar-tools">
+                <h2><span translate="gestion.nouveauCercle.title"></span></h2>
+            </div>
+        </md-toolbar>
+
+        <md-dialog-content>
+            <div class="md-dialog-content">
+
+                <cdc-alert-error></cdc-alert-error>
+
+                <div layout="row">
+                    <md-input-container flex="grow">
+                        <label translate="gestion.Cercle.label"></label>
+                        <input name="label" type="text" ng-model="currentCercle.label" required>
+                        <div role="alert"><span class="error" ng-show="currentForm.label.$error.required"> <span translate="gestion.error.required"/></span></div>
+                    </md-input-container>
+                </div>
+
+            </div>
+        </md-dialog-content>
+
+        <md-dialog-actions layout="row" layout-sm="column" layout-align="center center" layout-wrap>
+            <md-button class="md-raised md-primary" ng-click="validate(currentCercle)" aria-label="{{'action.validate' | translate}}" translate="action.validate"></md-button>
+            <md-button class="md-raised" ng-click="cancel()" aria-label="{{'action.cancel' | translate}}" translate="action.cancel"></md-button>
+        </md-dialog-actions>
+
+    </form>
+
+</md-dialog>

@@ -1,0 +1,28 @@
+<ion-view view-title="Activity">
+  <ion-content ng-class="{expanded:isExpanded}" class="animate-fade-slide-in">
+
+    <div ng-hide="allLiens.items[0]" class="errormessage warning">Pas de liens</div>
+
+    <div class="item card-item" ng-repeat="lien in allLiens.items | orderBy: order ">
+
+      <div class="card stable-bg ink ink-dark">
+        <div class="item item-avatar item-text-wrap">
+
+          <h2>{{lien.title}}</h2>
+          {{lien.teasing}}
+          <a ng-href="{{lien.url}}" target="_blank">{{lien.url}}</a>
+
+          <div class="card-footer text-right">
+            <i ng-click="delete(lien)" class="icon ion-trash-a"></i>
+            <i ng-click="read(lien)" class="icon ion-eye"></i>
+            <i ng-show="canShare()" ng-click="share($event, lien)" class="icon ion-share"></i>
+
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </ion-content>
+</ion-view>
+
