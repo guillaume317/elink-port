@@ -34,3 +34,6 @@ proguard/
 
 # Log Files
 *.log
+
+## ide
+.idea

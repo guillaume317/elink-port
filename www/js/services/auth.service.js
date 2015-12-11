@@ -4,43 +4,14 @@
     angular.module('el1.services.commun',[ 'el1.model' ] );
 
     angular.module('el1.services.commun')
-        .service('AuthService', ['$q', '$http', 'UserModel', 'Env', '$firebaseObject', AuthService]);
+        .service('AuthService', ['$q', '$http', 'UserModel', 'Env', AuthService]);
 
     /**
      *
      */
-    function AuthService($q, $http, UserModel, Env, $firebaseObject) {
+    function AuthService($q, $http, UserModel, Env){
 
         return {
-            user: function (nom, prenom) {
-                var deferred = $q.defer();
-                var refIndex = new Firebase("https://challenge-elink.firebaseio.com/index-personnes/" + nom + "/" + prenom);
-                
-                var userIndex = $firebaseObject(refIndex);
-                userIndex.$loaded().then(
-                    function () {
-                        console.log("user" + userIndex.$value);
-                        var ref = new Firebase("https://challenge-elink.firebaseio.com/personnes/" + userIndex.$value);
-                        ref.on("value", function(snapshot) {
-                              console.log(snapshot.val());
-                            }, function (errorObject) {
-                                  console.log("The read failed: " + errorObject.code);
-                                });
-
-
-                        /*var user = $firebaseObject(ref);
-                        user.$loaded().then(
-                            function () {
-                                deferred.resolve(user);
-                            }
-                            );*/
-                        
-                    }).catch(function(error) {
-                        deferred.reject(error);
-                    });
-
-                return deferred.promise;
-            },
             login : function(credentials) {
                 var _this= this;
                 var deferred = $q.defer();

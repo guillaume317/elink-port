@@ -3,62 +3,70 @@
     'use strict';
     module.config(function ($stateProvider) {
 
-        $stateProvider.state('bibli-nonLu', {
-            url: '/bibli/nonLu',
-            data : {
-                title :"view"
-            },
-            views: {
-                "main": {
-                    controller: 'bibliController',
-                    templateUrl: 'js/bibli/views/el1-nonLu.tpl.html',
-                    resolve: {
-                        allLiens : function($log, LiensService, $stateParams) {
-                            return LiensService.findMyLinks(true);
-                        },
-                        allCategories : function($log, LiensService, $stateParams) {
-                            return LiensService.findCategories();
-                        },
-                        allMyCercles : function($log, LiensService, $stateParams) {
-                            return LiensService.findMyCercles();
-                        }
-                    }
+        $stateProvider.state('app.bibli-nonLu', {
+          url: '/bibli/nonLu',
+          views: {
+            'menuContent': {
+              templateUrl: 'templates/el1-nonLu.tpl.html',
+              controller: 'bibliController',
+              resolve: {
+                liensNonLus : function($rootScope, LiensService) {
+                  return LiensService.findNotReadLinksByUser($rootScope.userConnected.$id);
+                },
+                liensLus : function($rootScope, LiensService) {
+                  return LiensService.findReadLinksByUser($rootScope.userConnected.$id);
+                },
+                allMyCercles :  function($rootScope, UsersManager) {
+                  return UsersManager.findCerclesByUser($rootScope.userConnected.$id);
+                },
+                allCategories : function(LiensService) {
+                  return LiensService.findCategories();
                 }
+              }
             },
-            resolve: {
-
+            'fabContent': {
+              template: '<button id="fab-nonLu" class="button button-fab button-fab-top-right expanded button-energized-900 drop"><i class="icon ion-plus-round"></i></button>',
+              controller: function($timeout) {
+                $timeout(function() {
+                  document.getElementById('fab-nonLu').classList.toggle('on');
+                }, 200);
+              }
             }
-        });
-
-        $stateProvider.state('bibli-lu', {
-            url: '/bibli/lu',
-            data : {
-                    title :"view"
-            },
-            views: {
-                "main": {
-                    controller: 'bibliController',
-                    templateUrl: 'js//bibli/views/el1-lu.tpl.html',
-                    resolve: {
-                        allLiens : function($log, LiensService, $stateParams) {
-                            return LiensService.findMyLinks(false);
-                        },
-                        allCategories : function($log, LiensService, $stateParams) {
-                            return LiensService.findCategories();
-                        },
-                        allMyCercles : function($log, LiensService, $stateParams) {
-                            return LiensService.findMyCercles();
-                        }
-                    }
-                }
-            },
-            resolve: {
-
-            }
+          }
         });
 
 
-
+      $stateProvider.state('app.bibli-lu', {
+        url: '/bibli/lu',
+        views: {
+          'menuContent': {
+            templateUrl: 'templates/el1-lu.tpl.html',
+            controller: 'bibliController',
+            resolve: {
+              liensNonLus : function($rootScope, LiensService) {
+                return LiensService.findNotReadLinksByUser($rootScope.userConnected.$id);
+              },
+              liensLus : function($rootScope, LiensService) {
+                return LiensService.findReadLinksByUser($rootScope.userConnected.$id);
+              },
+              allMyCercles :  function($rootScope, UsersManager) {
+                return UsersManager.findCerclesByUser($rootScope.userConnected.$id);
+              },
+              allCategories : function(LiensService) {
+                return LiensService.findCategories();
+              }
+            }
+          },
+          'fabContent': {
+            template: '<button id="fab-lu" class="button button-fab button-fab-top-right expanded button-energized-900 drop"><i class="icon ion-plus-round"></i></button>',
+            controller: function($timeout) {
+              $timeout(function() {
+                document.getElementById('fab-lu').classList.toggle('on');
+              }, 200);
+            }
+          }
+        }
+      });
 
     });
 

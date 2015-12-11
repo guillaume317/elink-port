@@ -1,23 +1,28 @@
 angular.module('el1.login', ['ionic', 'ionic-material', 'ionMdInput', 'el1.services.commun', 'el1.model'])
     .config(function ($stateProvider) {
 
-        $stateProvider.state('showLogin', {
-            url: '/showLogin',
-            data:{ pageTitle: 'Login' },
-            views: {
-                "main": {
-                    controller: 'LoginCtrl',
-                    templateUrl: 'js/login/login.tpl.html'
-                }
+        $stateProvider.state('app.login', {
+          url: '/login',
+          views: {
+            'menuContent': {
+              templateUrl: 'js/login/login.tpl.html',
+              controller: 'LoginCtrl'
             },
-            resolve: {
-
+            'fabContent': {
+              template: ''
             }
+          }
         });
 
-
     })
-    .controller('LoginCtrl', function($state, $rootScope, $scope, $http, $location, AuthService, Env, $log) {
+    .controller('LoginCtrl', function($state, $rootScope, $scope, $http, $location, AuthService, Env, $log, $timeout, $stateParams, ionicMaterialInk) {
+            $scope.$parent.clearFabs();
+            /*
+            TEMP
+              $timeout(function() {
+              $scope.$parent.hideHeader();
+            }, 0);
+            ionicMaterialInk.displayEffect();*/
 
             $scope.credentials = {};
 

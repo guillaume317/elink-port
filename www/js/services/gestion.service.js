@@ -2,46 +2,165 @@
     'use strict';
 
     angular.module('el1.services.commun')
-        .service('GestionService', ['$q', '$http', 'CercleModel', 'PersonnesModel', 'commonsService', 'Env', GestionService]);
+        .service('GestionService', ['$rootScope', '$q', '$http', '$firebaseObject', '$firebaseArray', 'CercleModel', 'PersonnesModel', 'commonsService', 'Env', 'UsersManager', GestionService]);
 
     /**
      *
      */
-    function GestionService($q, $http, CercleModel, PersonnesModel, commonsService, Env){
+    function GestionService($rootScope, $q, $http, $firebaseObject, $firebaseArray, CercleModel, PersonnesModel, commonsService, Env, UsersManager){
+
+        var ref = new Firebase("https://elink.firebaseio.com/");
+
+        function saveCercle (cercleName, cercleDescription, username) {
+
+            var deferred = $q.defer();
+
+            var cercleRef = ref.child('cercles').child(cercleName);
+            var cercle = $firebaseObject(cercleRef);
+
+            cercle.$loaded()
+                .then(function () {
+                    if (cercle.$value !== null) {
+                        deferred.reject(new Error("le cercle existe déjà !"));
+                    } else {
+
+                        cercle.user = username;
+                        //cercle.created = new Date().getTime();
+                        cercle.created = Firebase.ServerValue.TIMESTAMP;
+                        cercle.description = cercleDescription;
+
+                        cercle.$save()
+                            .then(function () {
+                                deferred.resolve(cercle);
+                            })
+                            .catch(function (error) {
+                                deferred.reject(error);
+                            });
+                    }
+                })
+                .catch(function (error) {
+                    deferred.reject(error);
+                });
+
+            return deferred.promise;
+
+        }
+        function saveCercleMember (cerclename, username) {
+
+            var deferred = $q.defer();
+
+            var cercleMemberRef = ref.child('cercleMembers').child(cerclename).child(username);
+            var cercleMember = $firebaseObject(cercleMemberRef);
+
+            cercleMember.$loaded()
+                .then(function() {
+                    cercleMember.$value = true;
+                    cercleMember.$save()
+                        .then(function () {
+                            deferred.resolve(cerclename);
+                        })
+                        .catch(function (error) {
+                            deferred.reject(error);
+                        });
+                })
+                .catch(function(error) {
+                    deferred.reject(error);
+                });
+
+            return deferred.promise;
+
+        }
+
+        function getCercleUsers(usersIndex) {
+
+            var promises = [];
+
+            angular.forEach(usersIndex,  function(userIndex, index) {
+                promises.push(UsersManager.getUser(userIndex.$id));
+            });
+
+            return $q.all(promises);
+        }
+
+
 
         return {
             createCercle : function (aCercleModel) {
-            },
-            accepterInvitation : function(invitation) {
+
+                return saveCercle(aCercleModel.label, aCercleModel.description, $rootScope.userConnected.$id)
+                    .then(function(cercle){
+                        return saveCercleMember (cercle.$id, $rootScope.userConnected.$id);
+                    })
+                    .then(function(cerclename){
+                        return UsersManager.addCercle($rootScope.userConnected.$id, cerclename)
+                    });
 
             },
-            inviter : function (invitation) {
-
+            accepterInvitation : function(username, cerclename) {
+                // ==> Ajout du cercle au niveau du user.
+                // ==> Ajout de l'utilisateur au niveau des membres du cercle
+                // ==> Suppression de l'invitation en attente
+                return saveCercleMember(cerclename, username)
+                    .then( function(cercleName) {
+                        return UsersManager.addCercle(username, cerclename)
+                    })
+                    .then(function(user) {
+                        return UsersManager.removeInvitation(username, cerclename)
+                    });
             },
+
             findPersonnesByCercle : function (cercle) {
-                if ( Env.isMock() ) {
-                    var pers1 = {"id": "4", "nom": "Chombier", "prenom" : "Arthur" };
-                    var pers2 = {"id": "5", "nom": "Dupont" , "prenom" : "Arthur" };
-                    var array = [];
 
-                    array.push(pers1);
-                    array.push(pers2);
+                var deferred = $q.defer();
 
-                    return new PersonnesModel(array);
-                }
+                var membersRef = ref.child('cercleMembers').child(cercle.$id);
+                var membersIndex = $firebaseArray(membersRef);
+
+                membersIndex.$loaded()
+                    .then(function() {
+                        return getCercleUsers(membersIndex)
+                    })
+                    .then(function(users) {
+                        deferred.resolve(new PersonnesModel(users));
+                    })
+                    .catch(function(error) {
+                        deferred.reject(error);
+                    });
+
+                return deferred.promise;
+
             },
-            findInvitationsByUser : function (user) {
-                if ( Env.isMock() ) {
-                    var inv1 = {"id": "4", "cercle": "CCMT" };
-                    var inv2 = {"id": "5", "cercle": "AngularJS" };
-                    var array = [];
 
-                    array.push(inv1);
-                    array.push(inv2);
+            shareLien : function(shareLink, username) {
 
-                    return array;
-                }
+                var deferred = $q.defer();
+
+                var cercleLinksRef = ref.child('cercleLinks').child(shareLink.cercleName);
+                var cercleLinksIndex = $firebaseArray(cercleLinksRef);
+
+                cercleLinksIndex.$loaded()
+                    .then(function() {
+                        var newCercle = {
+                            title: shareLink.title,
+                            teasing: shareLink.teasing,
+                            createdOn : Firebase.ServerValue.TIMESTAMP,
+                            url : shareLink.url,
+                            category: shareLink.category,
+                            sharedBy: username
+                        };
+                        cercleLinksIndex.$add(newCercle)
+                            .then(function() {
+                                deferred.resolve(newCercle);
+                            })
+                    })
+                    .catch(function(error) {
+                        deferred.reject(error);
+                    });
+
+                return deferred.promise;
+
             }
+
         };
 
     }

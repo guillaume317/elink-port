@@ -9,7 +9,7 @@
 
     function UsersManager ($firebaseObject, $firebaseArray, $q, Env) {
 
-        var ref = new Firebase("https://elink.firebaseio.com/");
+        var ref = new Firebase("https://challenge-elink.firebaseio.com/");
 
             return {
 
@@ -39,7 +39,7 @@
 
                 /**
                  *
-                 * @param userIndex Utiliosateur connecté
+                 * @param userIndex Utiliosateur connectï¿½
                  * @param cercleName
                  * @returns {*|a}
                  */
@@ -62,9 +62,9 @@
                 },
 
                 /**
-                 * Création association utilisateur -> cercles
-                 * @param userIndex Utilisateur connecté
-                 * @param cercleName nom du cercle à ajouter
+                 * Crï¿½ation association utilisateur -> cercles
+                 * @param userIndex Utilisateur connectï¿½
+                 * @param cercleName nom du cercle ï¿½ ajouter
                  */
                 addCercle: function (username, cerclename) {
 
