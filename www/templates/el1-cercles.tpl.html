@@ -1,0 +1,63 @@
+<ion-view view-title="Cercles">
+  <ion-content ng-class="{expanded:isExpanded}" class="animate-fade-slide-in">
+
+    <div class="tabs tabs-dark tabs-icon-top static">
+
+      <div class="tab-item">
+        <label class="item item-input item-select">
+          <div class="input-label">
+            Catégorie
+          </div>
+          <select>
+            <option value="">Toutes</option>
+            <option ng-repeat="cat in categories" value="{{cat}}">
+              {{cat}}
+            </option>
+          </select>
+        </label>
+      </div>
+
+      <div class="tab-item">
+          <label class="item item-input item-select">
+            <div class="input-label">
+              Cercle
+            </div>
+            <select>
+              <option ng-repeat="aCercle in cercles" value="{{aCercle}}">
+                {{aCercle}}
+              </option>
+            </select>
+          </label>
+      </div>
+
+    </div>
+
+    <div ng-hide="allLiens[0]" class="errormessage warning">Pas de liens</div>
+
+    <div class="item card-item" ng-repeat="lien in allLiens | filter:filter.category ">
+      <div class="card stable-bg ink-dark">
+        <div class="item item-avatar item-text-wrap">
+
+          <div class="ink" ng-click="showURL(lien)" >
+            <h2>{{lien.title}}</h2>
+            <p>{{lien.teasing}}</p>
+
+            <p>
+              <b>{{lien.category}}</b>
+            </p>
+
+          </div>
+
+          <div class="card-footer">
+            <div class="text-right">
+                <span class="pull-left">   partagé par  <i class="icon ion-person"></i> {{lien.sharedBy}}</span>
+                <button ng-click="read(lien)" class=" button button-fab "><i class="icon ion-eye"></i></button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+  </ion-content>
+</ion-view>

@@ -4,7 +4,7 @@
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
 // 'starter.controllers' is found in controllers.js
-angular.module('starter', ['ionic', 'starter.controllers', 'ionic-material', 'ionMdInput', 'firebase', 'el1.login', 'el1.bibli', 'el1.model', 'el1.services.commun'])
+angular.module('starter', ['ionic', 'starter.controllers', 'ionic-material', 'ionMdInput', 'firebase', 'el1.login', 'el1.cercle', 'el1.bibli', 'el1.model', 'el1.services.commun'])
 
   .run(function($ionicPlatform, Env, UsersManager,  $rootScope) {
     $ionicPlatform.ready(function() {
@@ -57,92 +57,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ionic-material', 'io
       abstract: true,
       templateUrl: 'templates/el1-menu.tpl.html',
       controller: 'AppCtrl'
-    })
-
-      .state('app.activity', {
-        url: '/activity',
-        views: {
-          'menuContent': {
-            templateUrl: 'templates/activity.html',
-            controller: 'ActivityCtrl'
-          },
-          'fabContent': {
-            template: '<button id="fab-activity" class="button button-fab button-fab-top-right expanded button-energized-900 flap"><i class="icon ion-paper-airplane"></i></button>',
-            controller: function($timeout) {
-              $timeout(function() {
-                document.getElementById('fab-activity').classList.toggle('on');
-              }, 200);
-            }
-          }
-        }
-      })
-
-      .state('app.friends', {
-        url: '/friends',
-        views: {
-          'menuContent': {
-            templateUrl: 'templates/friends.html',
-            controller: 'FriendsCtrl'
-          },
-          'fabContent': {
-            template: '<button id="fab-friends" class="button button-fab button-fab-top-left expanded button-energized-900 spin"><i class="icon ion-chatbubbles"></i></button>',
-            controller: function($timeout) {
-              $timeout(function() {
-                document.getElementById('fab-friends').classList.toggle('on');
-              }, 900);
-            }
-          }
-        }
-      })
-
-      .state('app.gallery', {
-        url: '/gallery',
-        views: {
-          'menuContent': {
-            templateUrl: 'templates/gallery.html',
-            controller: 'GalleryCtrl'
-          },
-          'fabContent': {
-            template: '<button id="fab-gallery" class="button button-fab button-fab-top-right expanded button-energized-900 drop"><i class="icon ion-heart"></i></button>',
-            controller: function($timeout) {
-              $timeout(function() {
-                document.getElementById('fab-gallery').classList.toggle('on');
-              }, 600);
-            }
-          }
-        }
-      })
-/*
-      .state('app.login', {
-        url: '/login',
-        views: {
-          'menuContent': {
-            templateUrl: 'js/login/login.tpl.html',
-            controller: 'LoginCtrl'
-          },
-          'fabContent': {
-            template: ''
-          }
-        }
-      })*/
-
-      .state('app.profile', {
-        url: '/profile',
-        views: {
-          'menuContent': {
-            templateUrl: 'templates/profile.html',
-            controller: 'ProfileCtrl'
-          },
-          'fabContent': {
-            template: '<button id="fab-profile" class="button button-fab button-fab-bottom-right button-energized-900"><i class="icon ion-plus"></i></button>',
-            controller: function($timeout) {
-              /*$timeout(function () {
-               document.getElementById('fab-profile').classList.toggle('on');
-               }, 800);*/
-            }
-          }
-        }
-      });
+    });
 
     // if none of the above states are matched, use this as the fallback
     $urlRouterProvider.otherwise('/app/login');

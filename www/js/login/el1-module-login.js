@@ -5,7 +5,7 @@ angular.module('el1.login', ['ionic', 'ionic-material', 'ionMdInput', 'el1.servi
           url: '/login',
           views: {
             'menuContent': {
-              templateUrl: 'js/login/login.tpl.html',
+              templateUrl: 'templates/el1-login.tpl.html',
               controller: 'LoginCtrl'
             },
             'fabContent': {

@@ -58,11 +58,12 @@
             }
           },
           'fabContent': {
-            template: '<button id="fab-lu" class="button button-fab button-fab-top-right expanded button-energized-900 drop"><i class="icon ion-plus-round"></i></button>',
+            templateUrl: 'templates/el1-fabContent.tpl.html',
+            //template: '<mylink></mylink>',
             controller: function($timeout) {
-              $timeout(function() {
-                document.getElementById('fab-lu').classList.toggle('on');
-              }, 200);
+              /*$timeout(function() {
+                document.getElementById('fab-newLink').classList.toggle('on');
+              }, 200);*/
             }
           }
         }

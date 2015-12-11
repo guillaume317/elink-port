@@ -1,0 +1,24 @@
+<form name="currentForm">
+  <div class="list">
+
+    <label class="item item-input">
+      <input name="url" type="url" ng-model="currentLien.url" placeholder="url" autofocus>
+    </label>
+
+    <label class="item item-input">
+      Dépôt dans :
+    </label>
+
+      <ion-list>
+        <ion-radio ng-model="currentLien.read" ng-value="false">Non Lu</ion-radio>
+        <ion-radio ng-model="currentLien.read" ng-value="true">Biblio</ion-radio>
+      </ion-list>
+
+<!--
+    <ion-list>
+      <ion-radio ng-model="currentLien.private" ng-value="true">Privé</ion-radio>
+      <ion-radio ng-model="currentLien.private" ng-value="false">Public</ion-radio>
+    </ion-list>
+-->
+  </div>
+</form>

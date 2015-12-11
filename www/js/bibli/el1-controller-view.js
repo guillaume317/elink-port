@@ -53,7 +53,7 @@
 
         $scope.moveTo = function(lien) {
             //cas des liens non lus
-            if ($state.current.name === 'bibli-nonLu') {
+            if ($state.current.name === 'app.bibli-nonLu') {
                 //Ajout dans biblio
                 liensLus.$add(lien);
             } else {
@@ -84,9 +84,9 @@
               templateUrl: 'templates/el1-share.tpl.html',
               scope: $scope,
               buttons: [
-                { text: 'Annuler' },
+                { text: '<i class="icon ion-close-round"></i>' },
                 {
-                  text: '<b>Partager</b>',
+                  text: '<i class="icon ion-checkmark"></i>',
                   type: 'button-positive',
                   onTap: function(e) {
                     if (! $scope.currentForm.$valid) {

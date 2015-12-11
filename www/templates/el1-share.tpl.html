@@ -1,25 +1,24 @@
 <form name="currentForm">
   <div class="list">
 
-    <ion-md-input placeholder="Titre" ng-model="shareLink.title" highlight-color="balanced" type="text" required></ion-md-input>
-    <div role="alert"><span class="error" ng-show="currentForm.title.$error.required"> <span translate="view.error.required"/></span></div>
+    <label class="item item-input">
+      <input type="text" ng-model="shareLink.title" placeholder="Titre">
+    </label>
 
-    <textarea name="teasing" rows="10" cols="50"  ng-model="shareLink.teasing"></textarea>
+    <label class="item item-input">
+      <textarea name="teasing" rows="10" cols="50"  ng-model="shareLink.teasing"></textarea>
+    </label>
 
-    <div class="list">
-
-      <label class="item item-input item-select">
-        <div class="input-label">
-          Catégorie
-        </div>
-        <select>
-          <option ng-repeat="cat in categories" value="{{cat}}">
-            {{cat}}
-          </option>
-        </select>
-      </label>
-
-    </div>
+    <label class="item item-input item-select">
+      <div class="input-label">
+        Catégorie
+      </div>
+      <select>
+        <option ng-repeat="cat in categories" value="{{cat}}">
+          {{cat}}
+        </option>
+      </select>
+    </label>
 
   </div>
 </form>
