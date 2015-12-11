@@ -5,8 +5,26 @@
 // the 2nd parameter is an array of 'requires'
 angular.module('starter', ['ionic', 'ionic-material', 'ionMdInput', 'firebase', 'el1.login', 'el1.bibli', 'el1.model', 'el1.services.commun'])
 
-.run(function($ionicPlatform) {
+.run(function($ionicPlatform, $rootScope, Env, UsersManager) {
   $ionicPlatform.ready(function() {
+      //Extraction de l'utilisateur connecté / Matthieu par défaut
+        // @Author MG
+        // TODO merger à terme avec la représentation $rootScope.user
+
+        $rootScope.userConnected = {
+          $id: "Matthieu",
+          email: "matthieu.guillemette@caissedesdepots.fr",
+          firstname: "Matthieu",
+          fullname: "Matthieu Guillemette",
+          lastname: "Guillemette"
+        };
+        UsersManager.getUser("Matthieu")
+          .then(function(user) {
+            $rootScope.userConnected = user;
+          });
+
+
+
     if(window.cordova && window.cordova.plugins.Keyboard) {
       // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
       // for form inputs)
