@@ -45,7 +45,11 @@
 
         };
 
-        $scope.moveToBiblio= function(lien) {
+      $scope.like= function(lien) {
+      };
+
+
+      $scope.moveToBiblio= function(lien) {
           //On déplace le lien dans biblio
           //puis on le supprime dans la liste des articles du cercle
           lien.private = "biblio";

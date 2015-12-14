@@ -42,6 +42,48 @@
         });
 
 
+        $stateProvider.state('app.icdc-view', {
+          url: '/icdc/view',
+          views: {
+            'menuContent': {
+              templateUrl: 'templates/el1-icdc.tpl.html',
+              controller: 'cercleController',
+              resolve: {
+                liens : ['$log', 'LiensService', 'UsersManager', 'SessionStorage', 'USERFIREBASEPROFILEKEY',
+                  function($log, LiensService, UsersManager, SessionStorage, USERFIREBASEPROFILEKEY) {
+                    return UsersManager.findCerclesByUser(SessionStorage.get(USERFIREBASEPROFILEKEY).uid)
+                      .then(function (cercles) {
+
+                        // TODO ramener les liens les mieux notés
+
+                        if (cercles.length > 0) {
+                          return LiensService.findLinksByCerlceName(cercles[0].$id);
+                        } else {
+                          return [];
+                        }
+                      })
+                  }],
+                allMyCercles :  ['UsersManager', 'SessionStorage', 'USERFIREBASEPROFILEKEY',
+                  function(UsersManager, SessionStorage, USERFIREBASEPROFILEKEY) {
+                    return [];
+                  }],
+                allCategories : ['LiensService', function(LiensService) {
+                  return LiensService.findCategories();
+                }]
+              }
+            },
+            'fabContent': {
+              template: ''
+            }
+          },
+          resolve: {
+            currentAuth: ['FBFactory', function(FBFactory) {
+              return FBFactory.auth().$requireAuth();
+            }]
+          }
+        });
+
+
     });
 
 }(angular.module('el1.cercle', [ 'ionic', 'ionic-material', 'ionMdInput', 'el1.services.commun', 'el1.model' ] )));
