@@ -17,12 +17,12 @@ angular.module('el1.login', ['ionic', 'ionic-material', 'ionMdInput', 'el1.servi
     })
     .controller('LoginCtrl', function($q, $state, $rootScope, $scope, $log, FBURL, $firebaseAuth, GOOGLEAUTHSCOPE, UsersManager, $timeout, $stateParams, ionicMaterialInk) {
             $scope.$parent.clearFabs();
-            /*
-            TEMP
-              $timeout(function() {
+
+            $timeout(function() {
               $scope.$parent.hideHeader();
             }, 0);
-            ionicMaterialInk.displayEffect();*/
+
+            ionicMaterialInk.displayEffect();
 
               var ref = new Firebase(FBURL);
               var auth = $firebaseAuth(ref);

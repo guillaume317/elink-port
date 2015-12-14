@@ -1,9 +1,9 @@
 /* global angular, document, window */
 'use strict';
 
-angular.module('starter.controllers', [])
+angular.module('starter.controllers', ['el1.services.commun', 'el1.model'])
 
-.controller('AppCtrl', function($scope, $ionicModal, $ionicPopover, $timeout) {
+.controller('AppCtrl', function($scope, $rootScope, AuthService, $state, $ionicModal, $ionicPopover, $timeout) {
     // Form data for the login modal
     $scope.loginData = {};
     $scope.isExpanded = false;
@@ -84,6 +84,13 @@ angular.module('starter.controllers', [])
         if (fabs.length && fabs.length > 1) {
             fabs[0].remove();
         }
+    };
+
+    $scope.logout = function() {
+      AuthService.logout();
+      $state.go('app.login');
+      $rootScope.userAuthenticated = false;
+      //delete $rootScope[userEmail];
     };
 })
 
