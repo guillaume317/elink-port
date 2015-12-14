@@ -1,7 +1,13 @@
 <ion-view view-title="Non Lu">
   <ion-content ng-class="{expanded:isExpanded}" class="animate-fade-slide-in">
 
-    <div ng-hide="liens[0]" class="errormessage warning">Pas de liens</div>
+    <newlink></newlink>
+
+    <div ng-hide="liens[0]" class="errormessage warning">
+      <div style="text-align: center">
+        <h4>Pas de liens</h4>
+      </div>
+    </div>
 
     <div class="item card-item" ng-repeat="lien in liens ">
       <div class="card stable-bg  ink-dark">

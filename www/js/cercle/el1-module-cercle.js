@@ -10,32 +10,34 @@
               templateUrl: 'templates/el1-cercles.tpl.html',
               controller: 'cercleController',
               resolve: {
-                  allLiens : function($rootScope, $log, LiensService, UsersManager, $stateParams) {
-                    /*
-                    return LiensService.findMyCercles().then(function(cercles) {
-                      return LiensService.findTeamLinks(cercles[0]);
-                    });*/
-
-                    // temp
-                    return LiensService.findNotReadLinksByUser($rootScope.userConnected.$id);
-                  },
-                  allCategories : function($log, LiensService, $stateParams) {
-                    return LiensService.findCategories();
-                  },
-                  allMyCercles : function($log, LiensService, $stateParams) {
-                    return LiensService.findMyCercles();
-                  }
+                liens : ['$log', 'LiensService', 'UsersManager', 'SessionStorage', 'USERFIREBASEPROFILEKEY',
+                  function($log, LiensService, UsersManager, SessionStorage, USERFIREBASEPROFILEKEY) {
+                    return UsersManager.findCerclesByUser(SessionStorage.get(USERFIREBASEPROFILEKEY).uid)
+                      .then(function (cercles) {
+                        if (cercles.length > 0) {
+                          return LiensService.findLinksByCerlceName(cercles[0].$id);
+                        } else {
+                          return [];
+                        }
+                      })
+                  }],
+                allMyCercles :  ['UsersManager', 'SessionStorage', 'USERFIREBASEPROFILEKEY',
+                  function(UsersManager, SessionStorage, USERFIREBASEPROFILEKEY) {
+                    return UsersManager.findCerclesByUser(SessionStorage.get(USERFIREBASEPROFILEKEY).uid);
+                  }],
+                allCategories : ['LiensService', function(LiensService) {
+                  return LiensService.findCategories();
+                }]
               }
             },
             'fabContent': {
-              template: '<button id="fab-cercle" class="button button-fab button-fab-top-right expanded button-energized-900 drop"><i class="icon ion-plus-round"></i></button>',
-              controller: function($timeout) {
-                $timeout(function() {
-                  document.getElementById('fab-cercle').classList.toggle('on');
-                }, 200);
-              }
-
+              template: ''
             }
+          },
+          resolve: {
+            currentAuth: ['FBFactory', function(FBFactory) {
+              return FBFactory.auth().$requireAuth();
+            }]
           }
         });
 

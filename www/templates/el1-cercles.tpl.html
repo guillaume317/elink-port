@@ -1,6 +1,8 @@
 <ion-view view-title="Cercles">
   <ion-content ng-class="{expanded:isExpanded}" class="animate-fade-slide-in">
 
+    <newlink></newlink>
+
     <div class="tabs tabs-dark tabs-icon-top static">
 
       <div class="tab-item">
@@ -32,7 +34,11 @@
 
     </div>
 
-    <div ng-hide="allLiens[0]" class="errormessage warning">Pas de liens</div>
+    <div ng-hide="allLiens[0]" class="errormessage warning">
+      <div style="text-align: center">
+        <h4>Pas de liens</h4>
+      </div>
+    </div>
 
     <div class="item card-item" ng-repeat="lien in allLiens | filter:filter.category ">
       <div class="card stable-bg ink-dark">
@@ -51,7 +57,7 @@
           <div class="card-footer">
             <div class="text-right">
                 <span class="pull-left">   partagé par  <i class="icon ion-person"></i> {{lien.sharedBy}}</span>
-                <button ng-click="read(lien)" class=" button button-fab "><i class="icon ion-eye"></i></button>
+                <button ng-click="moveToBiblio(lien)" class=" button button-fab "><i class="icon ion-eye"></i></button>
             </div>
           </div>
 

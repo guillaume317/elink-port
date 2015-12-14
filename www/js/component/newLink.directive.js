@@ -1,19 +1,21 @@
 'use strict';
 
 angular.module('starter')
-    .directive('newlink', function($rootScope, LiensService, $ionicPopup, $timeout) {
+    .directive('newlink', function($rootScope, LiensService, commonsService, $ionicPopup, $timeout) {
 		return {
             restrict: 'E',
 
             template:
-              '<button id="fab-newLink" ng-click="newLink()" class="button button-fab button-fab-top-right expanded button-energized-900 drop"><i class="icon ion-plus-round"></i></button>',
+              '<button id="fab-newLink" ng-click="newLink()" class="button button-fab button-fab-top-left expanded button-energized-900 drop"><i class="icon ion-plus-round"></i></button>',
 
-			controller: ['$scope', '$log', '$rootScope', 'LiensService', '$ionicPopup', '$timeout',
-	            function($scope, $log, $rootScope, LiensService, $ionicPopup, $timeout) {
+			controller: ['$scope', '$log', '$rootScope', 'LiensService', 'commonsService', 'SessionStorage', 'USERFIREBASEPROFILEKEY', '$ionicPopup', '$timeout',
+	            function($scope, $log, $rootScope, LiensService, commonsService, SessionStorage, USERFIREBASEPROFILEKEY, $ionicPopup, $timeout) {
                 $log.info("directive newLink")
 
                 $timeout(function() {
-                  document.getElementById('fab-newLink').classList.toggle('on');
+                  if (document.getElementById('fab-newLink') && document.getElementById('fab-newLink').classList) {
+                    document.getElementById('fab-newLink').classList.toggle('on');
+                  }
                 }, 200);
 
                 $scope.currentLien= {"url" : "", private: true};
@@ -21,6 +23,7 @@ angular.module('starter')
 
                 $scope.newLink = function () {
                       var myPopup = $ionicPopup.show({
+                        title: 'Nouveau lien',
                         templateUrl: 'templates/el1-newLink.tpl.html',
                         scope: $scope,
                         buttons: [
@@ -29,17 +32,19 @@ angular.module('starter')
                             text: '<i class="icon ion-checkmark"></i>',
                             type: 'button-positive',
                             onTap: function (e) {
-                              if (!$scope.currentForm.$valid) {
-                                e.preventDefault();
+                              if (! commonsService.isUrlValid($scope.currentLien.url) ) {
+                                  $scope.message= "Mauvais format d'url";
+                                  e.preventDefault();
                               } else {
 
-                                LiensService.createLinkForUser(currentLien, $rootScope.userConnected.$id)
+                                LiensService.createLinkForUser($scope.currentLien, SessionStorage.get(USERFIREBASEPROFILEKEY).uid)
                                   .then(function (newLink) {
                                     return "Valider";
                                   }, function (error) {
                                     $log.error(error);
                                   }
                                 );
+
                               }
                             } // onTap
                           }, // button valider

@@ -87,4 +87,17 @@ angular.module('starter.controllers', [])
     };
 })
 
+  .controller('AccueilCtrl', function($scope, ionicMaterialInk, ionicMaterialMotion, $timeout) {
+      $scope.isExpanded = true;
+
+      $timeout(function() {
+        ionicMaterialMotion.fadeSlideIn({
+          selector: '.animate-fade-slide-in .item'
+        });
+      }, 200);
+
+      // Activate ink for controller
+      ionicMaterialInk.displayEffect();
+  })
+
 ;

@@ -10,28 +10,31 @@
               templateUrl: 'templates/el1-nonLu.tpl.html',
               controller: 'bibliController',
               resolve: {
-                liensNonLus : function($rootScope, LiensService) {
-                  return LiensService.findNotReadLinksByUser($rootScope.userConnected.$id);
-                },
-                liensLus : function($rootScope, LiensService) {
-                  return LiensService.findReadLinksByUser($rootScope.userConnected.$id);
-                },
-                allMyCercles :  function($rootScope, UsersManager) {
-                  return UsersManager.findCerclesByUser($rootScope.userConnected.$id);
-                },
-                allCategories : function(LiensService) {
+                liensNonLus : ['$rootScope', 'LiensService', 'SessionStorage', 'USERFIREBASEPROFILEKEY',
+                  function($rootScope, LiensService,  SessionStorage ,USERFIREBASEPROFILEKEY) {
+                    return LiensService.findNotReadLinksByUser(SessionStorage.get(USERFIREBASEPROFILEKEY).uid);
+                  }],
+                liensLus : ['$rootScope', 'LiensService', 'SessionStorage', 'USERFIREBASEPROFILEKEY',
+                  function($rootScope, LiensService, SessionStorage ,USERFIREBASEPROFILEKEY) {
+                    return LiensService.findReadLinksByUser(SessionStorage.get(USERFIREBASEPROFILEKEY).uid);
+                  }],
+                allMyCercles :  ['$rootScope', 'UsersManager', 'SessionStorage', 'USERFIREBASEPROFILEKEY',
+                  function($rootScope, UsersManager, SessionStorage ,USERFIREBASEPROFILEKEY) {
+                    return UsersManager.findCerclesByUser(SessionStorage.get(USERFIREBASEPROFILEKEY).uid);
+                  }],
+                allCategories : ['LiensService', function(LiensService) {
                   return LiensService.findCategories();
-                }
+                }]
               }
             },
             'fabContent': {
-              template: '<button id="fab-nonLu" class="button button-fab button-fab-top-right expanded button-energized-900 drop"><i class="icon ion-plus-round"></i></button>',
-              controller: function($timeout) {
-                $timeout(function() {
-                  document.getElementById('fab-nonLu').classList.toggle('on');
-                }, 200);
-              }
+              template: ''
             }
+          },
+          resolve: {
+            currentAuth: ['FBFactory', function(FBFactory) {
+              return FBFactory.auth().$requireAuth();
+            }]
           }
         });
 
@@ -43,29 +46,31 @@
             templateUrl: 'templates/el1-lu.tpl.html',
             controller: 'bibliController',
             resolve: {
-              liensNonLus : function($rootScope, LiensService) {
-                return LiensService.findNotReadLinksByUser($rootScope.userConnected.$id);
-              },
-              liensLus : function($rootScope, LiensService) {
-                return LiensService.findReadLinksByUser($rootScope.userConnected.$id);
-              },
-              allMyCercles :  function($rootScope, UsersManager) {
-                return UsersManager.findCerclesByUser($rootScope.userConnected.$id);
-              },
-              allCategories : function(LiensService) {
+              liensNonLus : ['$rootScope', 'LiensService', 'SessionStorage', 'USERFIREBASEPROFILEKEY',
+                function($rootScope, LiensService,  SessionStorage ,USERFIREBASEPROFILEKEY) {
+                  return LiensService.findNotReadLinksByUser(SessionStorage.get(USERFIREBASEPROFILEKEY).uid);
+                }],
+              liensLus : ['$rootScope', 'LiensService', 'SessionStorage', 'USERFIREBASEPROFILEKEY',
+                function($rootScope, LiensService,SessionStorage ,USERFIREBASEPROFILEKEY) {
+                  return LiensService.findReadLinksByUser(SessionStorage.get(USERFIREBASEPROFILEKEY).uid);
+                }],
+              allMyCercles :  ['$rootScope', 'UsersManager', 'SessionStorage', 'USERFIREBASEPROFILEKEY',
+                function($rootScope, UsersManager, SessionStorage ,USERFIREBASEPROFILEKEY) {
+                  return UsersManager.findCerclesByUser(SessionStorage.get(USERFIREBASEPROFILEKEY).uid);
+                }],
+              allCategories : ['LiensService', function(LiensService) {
                 return LiensService.findCategories();
-              }
+              }]
             }
           },
           'fabContent': {
-            templateUrl: 'templates/el1-fabContent.tpl.html',
-            //template: '<mylink></mylink>',
-            controller: function($timeout) {
-              /*$timeout(function() {
-                document.getElementById('fab-newLink').classList.toggle('on');
-              }, 200);*/
-            }
+            template: ''
           }
+        },
+        resolve: {
+          currentAuth: ['FBFactory', function(FBFactory) {
+            return FBFactory.auth().$requireAuth();
+          }]
         }
       });
 

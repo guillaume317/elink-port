@@ -2,7 +2,10 @@
     'use strict';
 
     angular.module('el1.services.commun')
-        .service('commonsService', ['$q', '$http', CommonsService]);
+        .service('commonsService', ['$q', '$http', CommonsService])
+        .factory('FBFactory', ['$firebaseAuth', '$firebaseArray', 'FBURL', FBFactory])
+        .factory('LocalStorage', [LocalStorage])
+        .factory('SessionStorage', [SessionStorage]);
 
     /**
      *
@@ -27,10 +30,59 @@
                 }// for
 
                 return result;
-            } // flatModel
+            }, // flatModel
+
+            isUrlValid : function(url) {
+              return /^(https?|s?ftp):\/\/(((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:)*@)?(((\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5]))|((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?)(:\d*)?)(\/((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)+(\/(([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)*)*)?)?(\?((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|[\uE000-\uF8FF]|\/|\?)*)?(#((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|\/|\?)*)?$/i.test(url);
+            }
+
         };
 
     }
+
+  function FBFactory ($firebaseAuth, $firebaseArray, FBURL) {
+
+    return {
+      auth: function() {
+        var FBRef = new Firebase(FBURL);
+        return $firebaseAuth(FBRef);
+      }
+    };
+  }
+
+  function LocalStorage() {
+
+    return {
+
+      set: function(key, value) {
+        return localStorage.setItem(key,
+          JSON.stringify(value));
+      },
+      get: function(key) {
+        return JSON.parse(localStorage.getItem(key));
+      },
+      remove: function(key) {
+        return localStorage.removeItem(key);
+      }
+    };
+  }
+
+  function SessionStorage() {
+
+    return {
+
+      set: function(key, value) {
+        return sessionStorage.setItem(key,
+          JSON.stringify(value));
+      },
+      get: function(key) {
+        return JSON.parse(sessionStorage.getItem(key));
+      },
+      remove: function(key) {
+        return sessionStorage.removeItem(key);
+      }
+    };
+  }
 
 })();
 

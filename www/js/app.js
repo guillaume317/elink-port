@@ -4,12 +4,15 @@
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
 // 'starter.controllers' is found in controllers.js
-angular.module('starter', ['ionic', 'starter.controllers', 'ionic-material', 'ionMdInput', 'firebase', 'el1.login', 'el1.cercle', 'el1.bibli', 'el1.model', 'el1.services.commun'])
+angular.module('starter', ['ionic', 'starter.controllers', 'ionic-material', 'ionMdInput', 'firebase', 'el1.login', 'el1.truc', 'el1.cercle', 'el1.bibli', 'el1.model', 'el1.services.commun'])
 
   .run(function($ionicPlatform, Env, UsersManager,  $rootScope) {
     $ionicPlatform.ready(function() {
+
+      $rootScope.userAuthenticated = false;
+
       var config={
-        "backendfirebase": "https://challenge-elink.firebaseio.com/"
+        "backendfirebase": "https://elink.firebaseio.com/"
       };
       Env.init(config);
 
@@ -42,6 +45,15 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ionic-material', 'io
     });
   })
 
+  .constant('RESTBACKEND', 'http://localhost:8080/banconet/api/v1')
+
+  .constant('FBURL', 'https://elink.firebaseio.com/')
+
+  .constant('GOOGLEAUTHSCOPE', 'email, profile')
+
+  .constant('USERFIREBASEPROFILEKEY', 'firebase:session::elink')
+
+
   .config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
 
     // Turn off caching for demo simplicity's sake
@@ -58,7 +70,28 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ionic-material', 'io
       templateUrl: 'templates/el1-menu.tpl.html',
       controller: 'AppCtrl'
     });
+/*
+    $stateProvider.state('home', {
+      url: '/home',
 
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/accueil.tpl.html',
+          controller: 'AccueilCtrl'
+        },
+        'fabContent': {
+          template: ''
+        }
+      }
+
+    });
+/*
+    $stateProvider.state('home', {
+      url: '/home',
+      templateUrl: 'templates/accueil.tpl.html',
+      controller: 'AccueilCtrl'
+    });
+*/
     // if none of the above states are matched, use this as the fallback
-    $urlRouterProvider.otherwise('/app/login');
+    $urlRouterProvider.otherwise('app/login');
   });

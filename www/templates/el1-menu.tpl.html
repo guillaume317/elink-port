@@ -17,8 +17,11 @@
         </ion-header-bar>
         <ion-content class="stable-bg has-expanded-header">
             <ion-list>
-                <ion-item nav-clear menu-close ui-sref="app.login">
+                <ion-item nav-clear menu-close ng-show="!userAuthenticated" ui-sref="app.login">
                     Login
+                </ion-item>
+                <ion-item nav-clear menu-close ng-show="userAuthenticated" ng-click="logout()">
+                    Logout
                 </ion-item>
                 <ion-item nav-clear menu-close ui-sref="app.bibli-nonLu">
                     Non Lu
@@ -28,6 +31,9 @@
                 </ion-item>
                 <ion-item nav-clear menu-close ui-sref="app.cercle-view">
                     Cercle
+                </ion-item>
+                <ion-item nav-clear menu-close ui-sref="app.cercle-view">
+                    ICDC
                 </ion-item>
             </ion-list>
         </ion-content>
