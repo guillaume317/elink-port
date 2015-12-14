@@ -10,7 +10,17 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ionic-material', 'io
     $ionicPlatform.ready(function() {
 
       $rootScope.userAuthenticated = false;
+/*
+      TODO
 
+
+      $rootScope.$on('$stateChangeError',
+        function(event, toState, toParams, fromState, fromParams, error) {
+          if (error === 'AUTH_REQUIRED') {
+            $state.go('app.login');
+          }
+        });
+*/
       var config={
         "backendfirebase": "https://elink.firebaseio.com/"
       };

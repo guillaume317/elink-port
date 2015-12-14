@@ -32,7 +32,7 @@
 
       //liens : liens non lus ou biblio selon le cas
 
-      if ($state.current.name === 'bibli-nonLu') {
+      if ($state.current.name === 'app.bibli-nonLu') {
           $scope.liens = liensNonLus;
       } else {
           $scope.liens = liensLus;

@@ -73,7 +73,7 @@ angular.module('el1.login', ['ionic', 'ionic-material', 'ionMdInput', 'el1.servi
                         return $q.when(userConnected);
                     })
                     .then (function(userConnected) {
-                        $state.go('home');
+                        $state.go('app.bibli-nonLu');
                     })
                     .catch(function (error) {
                         $log.info("Authentication failed:", error);
