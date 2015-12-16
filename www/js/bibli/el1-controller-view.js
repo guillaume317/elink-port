@@ -4,7 +4,7 @@
         .module('el1.bibli')
         .controller('bibliController', [
             '$log', '$scope', '$rootScope', '$state',
-            'LiensService',
+            'LiensService', 'GestionService',
             'liensNonLus', 'liensLus', 'allMyCercles', 'allCategories',
             '$ionicPopup',
             '$stateParams', '$timeout', 'ionicMaterialInk', 'ionicMaterialMotion',
@@ -14,7 +14,7 @@
 
     /**
      */
-    function BibliController($log, $scope, $rootScope, $state, LiensService , liensNonLus, liensLus, allMyCercles, allCategories, $ionicPopup, $stateParams, $timeout, ionicMaterialInk, ionicMaterialMotion ) {
+    function BibliController($log, $scope, $rootScope, $state, LiensService, GestionService, liensNonLus, liensLus, allMyCercles, allCategories, $ionicPopup, $stateParams, $timeout, ionicMaterialInk, ionicMaterialMotion ) {
       $scope.$parent.showHeader();
       $scope.$parent.clearFabs();
       $scope.isExpanded = true;
@@ -89,22 +89,18 @@
                   text: '<i class="icon ion-checkmark"></i>',
                   type: 'button-positive',
                   onTap: function(e) {
-                    if (! $scope.currentForm.$valid) {
-                      e.preventDefault();
-                    } else {
                       //Lorsque le lien est partagé :
                       //   il est supprimé de read ou notRead
                       //   il est déplacé vers le cercle cible (cercleLinks)
                       //   il est associé à une catégorie (attribut category)
-                      GestionService.shareLien(shareLink, $rootScope.userConnected.$id)
-                        .then(function() {
-                          listeLiens.$remove(linkToShare);
-                          return "Valider";
-                        })
-                        .catch (function(error) {
-                          $log.error(error);
-                        })
-                    }
+                      GestionService.shareLien($scope.shareLink, $rootScope.userConnected.$id)
+                          .then(function() {
+                              $scope.liens.$remove(lien);
+                              return "Valider";
+                          })
+                          .catch (function(error) {
+                              $log.error(error);
+                          })
                   } // onTap
                 }, // button Partager
               ]
