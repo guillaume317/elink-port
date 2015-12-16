@@ -36,4 +36,4 @@ proguard/
 *.log
 
 ## ide
-.idea
+.idea/
