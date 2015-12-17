@@ -3,9 +3,21 @@
 
     angular.module('el1.services.commun')
         .service('commonsService', ['$q', '$http', CommonsService])
+        .service('EscapeUtils', EscapeUtils)
         .factory('FBFactory', ['$firebaseAuth', '$firebaseArray', 'FBURL', FBFactory])
         .factory('LocalStorage', [LocalStorage])
         .factory('SessionStorage', [SessionStorage]);
+
+    function EscapeUtils() {
+
+      this.escapeEmail = function (email) {
+        return (email || '').replace('.', ',');
+      }
+
+      this.unescapeEmail = function (email) {
+        return (email || '').replace(',', '.');
+      }
+    }
 
     /**
      *

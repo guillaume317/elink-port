@@ -4,7 +4,7 @@
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
 // 'starter.controllers' is found in controllers.js
-angular.module('starter', ['ionic', 'starter.controllers', 'ionic-material', 'ionMdInput', 'firebase', 'el1.login', 'el1.truc', 'el1.cercle', 'el1.bibli', 'el1.model', 'el1.services.commun'])
+angular.module('starter', ['ionic', 'starter.controllers', 'ionic-material', 'ionMdInput', 'ion-autocomplete', 'firebase', 'el1.login', 'el1.gestion', 'el1.truc', 'el1.cercle', 'el1.bibli', 'el1.model', 'el1.services.commun'])
 
   .run(function($ionicPlatform, Env, UsersManager,  $rootScope) {
     $ionicPlatform.ready(function() {

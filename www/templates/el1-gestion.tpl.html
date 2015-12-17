@@ -1,0 +1,63 @@
+<ion-view view-title="Gestion des cercles">
+  <ion-content ng-class="{expanded:isExpanded}" class="animate-fade-slide-in">
+
+    <div class="tabs tabs-dark static">
+
+      <div class="tab-item">
+          <select>
+            <option ng-repeat="cercl in cercles" ng-value="cercl" ng-click="changeCercle(cercl)" >
+              {{cercl.$id}}
+            </option>
+          </select>
+      </div>
+
+      <div class="tab-item">
+          <button ng-click="nouveauCercle($event)" class=" button button-flat bg-primary ">Nouveau</button>
+      </div>
+
+
+    </div>
+
+    <h3 class="title-primary">Invitation</h3>
+
+    <label class="item item-input">
+      <input ion-autocomplete type="text" readonly="readonly" class="ion-autocomplete" autocomplete="off"
+             ng-model="selectedItem"
+             item-view-value-key="email"
+             items-method="querySearch(query)"
+             placeholder="Utilisateur"
+             max-selected-items="1"/>
+    </label>
+
+    <div style="text-align: center">
+        <button ng-click="inviter(selectedItem)" class=" button button-flat bg-primary icon-right ion-paper-airplane" style="background-color: #b71c1c;">Lancer une invitation</button>
+    </div>
+
+
+    <h3 class="title-primary">Personnes</h3>
+
+    <ul class="list">
+      <li ng-repeat="personne in personnes | orderBy: fullname" class="item">
+          <span><b>{{personne.fullname}} ({{personne.email}})</b></span>
+      </li>
+    </ul>
+
+    <h3 class="title-primary">Invitation(s) en attente </h3>
+
+    <div ng-hide="mesInvitations[0]" class="errormessage warning" >Aucune pour le moment</div>
+
+    <div class="item card-item" ng-repeat="invitation in mesInvitations | orderBy: $id ">
+      <div class="card stable-bg ink-dark">
+        <div class="item item-text-wrap">
+          <div class="ink" style="">
+            <strong>{{invitation.$id}}</strong>
+          </div>
+          <div class=" text-right">
+            <button ng-click="accepterInvitation(invitation)" class=" button button-fab "><i class="icon ion-thumbsup"></i></button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </ion-content>
+</ion-view>

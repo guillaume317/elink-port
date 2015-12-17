@@ -5,9 +5,9 @@
     'use strict';
 
     angular.module('el1.services.commun')
-        .service('UsersManager', ['$firebaseObject', '$firebaseArray', '$q', 'FBURL', UsersManager]);
+        .service('UsersManager', ['$firebaseObject', '$firebaseArray', '$q', 'FBURL', 'EscapeUtils', UsersManager]);
 
-    function UsersManager($firebaseObject, $firebaseArray, $q, FBURL) {
+    function UsersManager($firebaseObject, $firebaseArray, $q, FBURL, EscapeUtils) {
 
         var ref = new Firebase(FBURL);
 
@@ -53,6 +53,7 @@
                         if (user.email) {
                             deferred.resolve(user);
                         } else {
+                            user.uid = authData.uid;
                             user.email = authData.google.cachedUserProfile.email;
                             user.fullname = authData.google.cachedUserProfile.name;
                             user.firstname = authData.google.cachedUserProfile.given_name;
@@ -67,6 +68,54 @@
                         deferred.reject(error);
                     });
                 return deferred.promise;
+            },
+
+            addUserEmail : function(userEmail) {
+                var deferred = $q.defer();
+
+                var userEmailRef = ref.child('usersEmail').child(EscapeUtils.escapeEmail(userEmail.email));
+                var userEmail = $firebaseObject(userEmailRef);
+
+                userEmail.$loaded()
+                    .then(function () {
+                        if (userEmail.$value) {
+                            deferred.resolve(userEmail);
+                        } else {
+                            userEmail.$value = userEmail.$id;
+                            userEmail.$save()
+                                .then(function () {
+                                    deferred.resolve(userEmail);
+                                });
+                        }
+                    }).catch(function (error) {
+                        deferred.reject(error);
+                    });
+                return deferred.promise;
+            },
+
+            getUsersEmail :  function(idUserConnected) {
+                var deferred = $q.defer();
+
+                var usersEmailRef = ref.child('usersEmail');
+                var usersEmail = $firebaseArray(usersEmailRef);
+                usersEmail.$loaded()
+                    .then(function () {
+                        var users = [];
+                        if (usersEmail.length>0) {
+                            usersEmail.forEach(function(user) {
+                                //l'utilisateur connecté n'est pas ajouté à la liste
+                                if (user.$value !== idUserConnected) {
+                                    users.push({uid: user.$value, email: EscapeUtils.unescapeEmail(user.$id)});
+                                }
+                            })
+                        }
+                        deferred.resolve(users);
+                    }).catch(function (error) {
+                        deferred.reject(error);
+                    });
+
+                return deferred.promise;
+
             },
 
             getUser: function (username) {

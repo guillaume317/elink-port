@@ -23,7 +23,7 @@ angular.module('starter')
 
                 $scope.newLink = function () {
                       var myPopup = $ionicPopup.show({
-                        title: 'Nouveau lien',
+                        title : 'Nouveau lien',
                         templateUrl: 'templates/el1-newLink.tpl.html',
                         scope: $scope,
                         buttons: [

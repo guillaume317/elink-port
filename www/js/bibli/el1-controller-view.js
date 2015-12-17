@@ -81,6 +81,7 @@
             }
 
             var myPopup = $ionicPopup.show({
+              title: 'Partage',
               templateUrl: 'templates/el1-share.tpl.html',
               scope: $scope,
               buttons: [

@@ -1,15 +1,33 @@
 
 .popup-body {
-
   background-color: white;
-
   color: #e6b400;
-
 }
-
 
 .item-select {
   position: relative; }
   .item-select select {
     min-width: 100%;
+}
+
+.title-primary {
+  color: #b71c1c;
+  text-align: center;
+  border-bottom: 1px;
+  border-bottom-style: solid;
+}
+
+.bg-primary {
+  background-color: #b71c1c;
+}
+
+.title-primary {
+  color: #B71C1C;
+  text-align: center;
+  border-bottom: 1px;
+  border-bottom-style: solid;
+}
+
+select {
+  max-width: 100%;
 }

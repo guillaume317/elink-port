@@ -21,7 +21,7 @@
             cercle.$loaded()
                 .then(function () {
                     if (cercle.$value !== null) {
-                        deferred.reject(new Error("le cercle existe dÈj‡ !"));
+                        deferred.reject(new Error("le cercle existe d√©j√† !"));
                     } else {
 
                         cercle.user = username;
@@ -121,7 +121,7 @@
                         return getCercleUsers(membersIndex)
                     })
                     .then(function(users) {
-                        deferred.resolve(new PersonnesModel(users));
+                        deferred.resolve(users);
                     })
                     .catch(function(error) {
                         deferred.reject(error);
