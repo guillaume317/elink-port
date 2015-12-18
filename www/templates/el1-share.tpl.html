@@ -2,7 +2,7 @@
   <div class="list">
 
     <label class="item item-input">
-      <input type="text" ng-model="shareLink.title" placeholder="Titre">
+      <input type="text" ng-model="shareLink.title" placeholder="Titre" required autofocus>
     </label>
 
     <label class="item item-input">
@@ -13,9 +13,20 @@
       <div class="input-label">
         Catégorie
       </div>
-      <select>
+      <select ng-model="shareLink.category">
         <option ng-repeat="cat in categories" value="{{cat}}">
           {{cat}}
+        </option>
+      </select>
+    </label>
+
+    <label class="item item-input item-select">
+      <div class="input-label">
+        Cercle
+      </div>
+      <select ng-model="shareLink.cercleName">
+        <option ng-repeat="cercl in cercles" value="{{cercl.$id}}">
+          {{cercl.$id}}
         </option>
       </select>
     </label>

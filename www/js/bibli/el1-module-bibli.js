@@ -12,10 +12,6 @@
               resolve: {
                 liensNonLus : ['$rootScope', 'LiensService', 'SessionStorage', 'USERFIREBASEPROFILEKEY',
                   function($rootScope, LiensService,  SessionStorage ,USERFIREBASEPROFILEKEY) {
-                    console.log("USERFIREBASEPROFILEKEY" + USERFIREBASEPROFILEKEY);
-                    console.log("USERFIREBASEPROFILEKEY" + USERFIREBASEPROFILEKEY.uid);
-                    console.log("USERFIREBASEPROFILEKEY" + SessionStorage.get(USERFIREBASEPROFILEKEY).uid);
-
                     return LiensService.findNotReadLinksByUser(SessionStorage.get(USERFIREBASEPROFILEKEY).uid);
                   }],
                 liensLus : ['$rootScope', 'LiensService', 'SessionStorage', 'USERFIREBASEPROFILEKEY',
