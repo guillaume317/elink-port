@@ -8,13 +8,13 @@
             'mesInvitations', 'personnesDuCercle', 'mesCercles', 'usersEmail',
             'SessionStorage', 'USERFIREBASEPROFILEKEY',
             '$ionicPopup',
-            '$stateParams', '$timeout', 'ionicMaterialInk', 'ionicMaterialMotion',
+            'ionicMaterialInk', 'ionicMaterialMotion',
             GestionController
         ]);
 
     /**
      */
-    function GestionController($log, $scope, $q, $timeout, GestionService, UsersManager, commonsService, mesInvitations, personnesDuCercle, mesCercles, usersEmail, SessionStorage, USERFIREBASEPROFILEKEY, $ionicPopup, $stateParams, $timeout, ionicMaterialInk, ionicMaterialMotion ) {
+    function GestionController($log, $scope, $q, $timeout, GestionService, UsersManager, commonsService, mesInvitations, personnesDuCercle, mesCercles, usersEmail, SessionStorage, USERFIREBASEPROFILEKEY, $ionicPopup, ionicMaterialInk, ionicMaterialMotion ) {
 
         $scope.mesInvitations= mesInvitations;
         $scope.personnes= personnesDuCercle;
@@ -34,14 +34,17 @@
         $scope.$parent.setExpanded(true);
         $scope.$parent.setHeaderFab('right');
 
-        $timeout(function() {
+      $scope.replayAnimation = function() {
+        $timeout(function () {
           ionicMaterialMotion.fadeSlideIn({
             selector: '.animate-fade-slide-in .item'
           });
         }, 200);
+      };
+      // Activate ink for controller
+      ionicMaterialInk.displayEffect();
 
-        // Activate ink for controller
-        ionicMaterialInk.displayEffect();
+      $scope.replayAnimation();
 
         //Functions utilisée par le select box autocomplete
         function querySearch (query) {
@@ -71,7 +74,9 @@
         }
 
         if (mesCercles[0]) {
-            $scope.selectedCercle = mesCercles[0];
+            $scope.data = {
+              "selectedCercle" : mesCercles[0]
+            };
         }
 
         $scope.nouveauCercle = function(ev) {
@@ -88,23 +93,21 @@
                   text: '<i class="icon ion-checkmark"></i>',
                   type: 'button-positive',
                   onTap: function(e) {
-
-                    GestionService.createCercle($scope.currentCercle).then(
-                      function (cerclename) {
-                          $log.info("cercle " + cerclename + " ok")
-                          return "Valider";
-                      }, function (error) {
-                          $log.error(error);
-                      }
-                    );
-
+                    return $scope.currentCercle;
                   } // onTap
                 }, // button nouveau cercle
               ]
             });
 
-            myPopup.then(function(res) {
-              console.log('Tapped!', res);
+            myPopup.then(function(newCercle) {
+              GestionService.createCercle(newCercle)
+                .then(function (cerclename) {
+                  return "Valider";
+                }, function (error) {
+                  $log.error(error);
+                }
+              );
+
             });
 
             $timeout(function() {
@@ -113,13 +116,14 @@
 
         }; // fin scope.nouveauCercle
 
-        $scope.changeCercle= function(cercleSelected) {
+        $scope.changeCercle= function() {
+
             //Changement de cercle
             //==> récupération des personnes du cercle choisi
-            GestionService.findPersonnesByCercle(cercleSelected)
+            GestionService.findPersonnesByCercle($scope.data.selectedCercle)
                 .then(function (personnes) {
-                    $scope.selectedCercle = cercleSelected;
                     $scope.personnes = personnes;
+                    $scope.replayAnimation();
                 })
                 .catch(function (error) {
                     $log.error(error);
@@ -127,18 +131,16 @@
         }
 
         $scope.inviter= function(invite) {
-            $log.info("invite " + invite);
-            $log.info("invite uid " + invite.uid);
-            $log.info("selectedCercle uid " + $scope.selectedCercle.$id);
 
             if (invite !== null) {
                 //L'utilisateur connecté invite un utilisateur à rejoindre le cercle sélectionné
-                UsersManager.inviter(invite.uid, $scope.selectedCercle.$id)
+                UsersManager.inviter(invite.uid, $scope.data.selectedCercle.$id)
                     .then(function (username) {
                         $scope.invited.push(invite.email);
                         $scope.invitedDisplay = $scope.invited.join(', ');
                         $scope.selectedItem = null;
                         $scope.searchText = null;
+                      //TODO afficher un TOAST
                     })
                     .catch(function (error) {
                         $log.error(error);

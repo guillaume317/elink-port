@@ -39,8 +39,6 @@
       }, 200);
     }
 
-    $scope.replayAnimation();
-
     // Activate ink for controller
     ionicMaterialInk.displayEffect();
 
@@ -48,6 +46,7 @@
     $scope.categories = allCategories;
     $scope.cercles = allMyCercles;
     $scope.cercle = allMyCercles[0];
+
     $scope.filter = {"category": ""};
 
     if (allMyCercles[0]) {
@@ -57,6 +56,10 @@
     }
     // Activate ink for controller
     ionicMaterialInk.displayEffect();
+
+
+    $scope.replayAnimation();
+
 
     $scope.changeCercle = function () {
       LiensService.findLinksByCerlceName($scope.data.selectedCercle.$id)

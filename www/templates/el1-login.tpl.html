@@ -1,16 +1,45 @@
 <ion-view view-title="Login" align-title="left">
-  <ion-content style="background: url(img/login.jpg) center; background-size: cover;">
+  <ion-content>
 
-    <div class="hero no-header flat">
+    <div class="hero flat">
+
       <div class="content">
-        <div class="app-icon"></div>
-        <h1>eLink</h1>
       </div>
     </div>
 
-    <div class="padding">
-      <button ng-click="login()" class="button button-full button-assertive ink">Login</button>
+    <div class="list card">
+
+      <div class="item item-body">
+        <div class="row">
+          <div class="col col-25"><img src="img/arton.jpg"></div>
+          <div class="col"><p>eLink reprend le principe des applications de partage d'informations et participe à une
+            veille collaborative.
+            Vous pouvez partager et échanger les meilleurs articles du web et lire leur contenu sur desktop ou mobile.
+
+            <br/><br/>
+            Techniquement, eLink repose sur notre socle AngularJs (desktop) et Ionic (Android). Les données sont
+            stockées
+            dans une base noSQL temps réel, le navigateur est également synchronisé en temps réel grâce aux web
+            sockets.<br/>
+            La charte repose sur material design et supporte uniquement les navigateur récents (Chrome, Firefox, IE11).
+
+            <br/><br/>
+            Pour utiliser l'application, vous devez vous authentifier par Google via OAuth, cela nécessite la création
+            d'un
+            <a href="https://accounts.google.com/login?hl=fr" target="_blank">compte</a> si vous n'en avez pas.
+          </p></div>
+        </div>
+      </div>
+      <div class="item tabs tabs-secondary tabs-icon-left">
+        <button ng-click="login()" class="button button-full button-assertive ink">S'authentifier avec <i class="icon ion-social-googleplus"></i></button>
+      </div>
     </div>
+
+
+
+    <!--div class="padding">
+      <button ng-click="login()" class="button button-full button-assertive ink">S'authentifier avec Google !</button>
+    </div-->
 
   </ion-content>
 </ion-view>
