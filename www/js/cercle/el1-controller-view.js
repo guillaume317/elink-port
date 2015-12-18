@@ -1,68 +1,150 @@
-(function(){
+(function () {
 
-    angular
-        .module('el1.cercle')
-        .controller('cercleController', [
-            '$log', '$scope', '$state',
-            'LiensService',
-            'liens',
-            'allCategories',
-            'allMyCercles',
-            '$stateParams', '$timeout', 'ionicMaterialInk', 'ionicMaterialMotion',
-            CercleController
-            ])
-    ;
+  angular
+    .module('el1.cercle')
+    .controller('cercleController', [
+      '$log', '$scope', '$state',
+      'LiensService', 'SessionStorage', 'USERFIREBASEPROFILEKEY',
+      'liens',
+      'allCategories',
+      'allMyCercles',
+      '$stateParams', '$timeout', 'ionicMaterialInk', 'ionicMaterialMotion',
+      CercleController
+    ])
+    .controller('icdcController', [
+      '$log', '$scope',
+      'LiensService',
+      'allCategories',
+      'topTen',
+      'SessionStorage',
+      'USERFIREBASEPROFILEKEY','$timeout', 'ionicMaterialInk', 'ionicMaterialMotion',
+      ICDCController
+    ])
+  ;
 
-    /**
-     */
-    function CercleController($log, $scope, $state, LiensService, liens, allCategories, allMyCercles, $stateParams, $timeout, ionicMaterialInk, ionicMaterialMotion ) {
-        $scope.$parent.showHeader();
-        $scope.$parent.clearFabs();
-        $scope.isExpanded = true;
-        $scope.$parent.setExpanded(true);
-        $scope.$parent.setHeaderFab('right');
+  /**
+   */
+  function CercleController($log, $scope, $state, LiensService, SessionStorage, USERFIREBASEPROFILEKEY, liens, allCategories, allMyCercles, $stateParams, $timeout, ionicMaterialInk, ionicMaterialMotion) {
+    $scope.$parent.showHeader();
+    $scope.$parent.clearFabs();
+    $scope.isExpanded = true;
+    $scope.$parent.setExpanded(true);
+    $scope.$parent.setHeaderFab('right');
 
-        $timeout(function() {
-          ionicMaterialMotion.fadeSlideIn({
-            selector: '.animate-fade-slide-in .item'
-          });
-        }, 200);
-
-        // Activate ink for controller
-        ionicMaterialInk.displayEffect();
-
-        $scope.allLiens= liens;
-        $scope.categories= allCategories;
-        $scope.cercles= allMyCercles;
-        $scope.cercle= allMyCercles[0];
-        $scope.filter= { "category" : "" };
-
-        $scope.changeCercle= function(cercle) {
-          LiensService.findLinksByCerlceName(cercle.$id)
-            .then(function(links){
-              $scope.allLiens = links;
-            });
-
-        };
-
-      $scope.like= function(lien) {
-      };
-
-
-      $scope.moveToBiblio= function(lien) {
-          //On déplace le lien dans biblio
-          //puis on le supprime dans la liste des articles du cercle
-          lien.private = "biblio";
-          LiensService.createLinkForUser(lien, SessionStorage.get(USERFIREBASEPROFILEKEY).uid)
-            .then(function() {
-              $scope.allLiens.$remove(lien);
-            })
-        };
-
-        $scope.showURL= function(lien) {
-          window.open(lien.url, '_system', 'location=yes');
-        };
-
+    $scope.replayAnimation = function() {
+      $timeout(function () {
+        ionicMaterialMotion.fadeSlideIn({
+          selector: '.animate-fade-slide-in .item'
+        });
+      }, 200);
     }
+
+    // Activate ink for controller
+    ionicMaterialInk.displayEffect();
+
+    $scope.allLiens = liens;
+    $scope.categories = allCategories;
+    $scope.cercles = allMyCercles;
+    $scope.cercle = allMyCercles[0];
+
+    $scope.filter = {"category": ""};
+
+    if (allMyCercles[0]) {
+      $scope.data = {
+        "selectedCercle" : allMyCercles[0]
+      };
+    }
+    // Activate ink for controller
+    ionicMaterialInk.displayEffect();
+
+
+    $scope.replayAnimation();
+
+
+    $scope.changeCercle = function () {
+      LiensService.findLinksByCerlceName($scope.data.selectedCercle.$id)
+        .then(function (links) {
+          $scope.allLiens = links;
+          $scope.replayAnimation();
+        });
+    };
+
+    $scope.changeCategory = function() {
+      $scope.replayAnimation();
+    }
+
+
+    $scope.like = function (alink) {
+      LiensService.addLike($scope.data.selectedCercle.$id, alink.$id);
+    };
+
+
+    $scope.moveToBiblio = function (alink) {
+      alink.private = "biblio";
+      LiensService.createLinkForUser(alink, SessionStorage.get(USERFIREBASEPROFILEKEY).uid);
+    };
+
+    $scope.showURL = function (alink) {
+      window.open(alink.url, '_system', 'location=yes');
+    };
+
+  }
+
+
+  /**
+   */
+  function ICDCController($log, $scope, LiensService, allCategories, topTen, SessionStorage, USERFIREBASEPROFILEKEY, $timeout, ionicMaterialInk, ionicMaterialMotion) {
+
+    $scope.$parent.showHeader();
+    $scope.$parent.clearFabs();
+    $scope.isExpanded = true;
+    $scope.$parent.setExpanded(true);
+    $scope.$parent.setHeaderFab('right');
+
+    $scope.replayAnimation = function() {
+      $timeout(function () {
+        ionicMaterialMotion.fadeSlideIn({
+          selector: '.animate-fade-slide-in .item'
+        });
+      }, 200);
+    };
+    // Activate ink for controller
+    ionicMaterialInk.displayEffect();
+
+    $scope.replayAnimation();
+
+    $scope.topTen= topTen;
+    $scope.categories= allCategories;
+    $scope.filter= { "category" : "" };
+
+    $scope.doRefresh = function() {
+
+      LiensService.findTopTenLinks()
+        .then(function(topTenRefresh) {
+          $scope.topTen= topTenRefresh;
+        })
+        .finally(function() {
+            // Stop the ion-refresher from spinning
+            $scope.$broadcast('scroll.refreshComplete');
+            $scope.replayAnimation();
+          });
+    };
+
+    $scope.changeCategory = function() {
+      $scope.replayAnimation();
+    }
+
+    $scope.moveToBiblio = function (alink) {
+      alink.private = "biblio";
+      LiensService.createLinkForUser(alink, SessionStorage.get(USERFIREBASEPROFILEKEY).uid);
+    };
+
+    //TODO in app browser plugin
+    $scope.showURL= function(lien) {
+      window.open(lien.url, '_blank');
+    }
+
+
+  }
 
 })();

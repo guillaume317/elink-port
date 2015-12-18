@@ -3,6 +3,11 @@
 
     <newlink></newlink>
 
+    <ion-refresher
+      pulling-text="Tirez pour actualiser..."
+      on-refresh="doRefresh()">
+    </ion-refresher>
+
     <div ng-hide="liens[0]" class="errormessage warning">
       <div style="text-align: center">
         <h4>Pas de liens</h4>

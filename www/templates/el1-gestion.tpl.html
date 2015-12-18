@@ -4,11 +4,10 @@
     <div class="tabs tabs-dark static">
 
       <div class="tab-item">
-          <select>
-            <option ng-repeat="cercl in cercles" ng-value="cercl" ng-click="changeCercle(cercl)" >
-              {{cercl.$id}}
-            </option>
-          </select>
+        <select ng-model="data.selectedCercle"
+                ng-change="changeCercle()"
+                ng-options="aCercle.$id for aCercle in cercles track by aCercle.$id">
+        </select>
       </div>
 
       <div class="tab-item">
@@ -34,7 +33,7 @@
     </div>
 
 
-    <h3 class="title-primary">Personnes</h3>
+    <h3 class="title-primary">Personnes / {{data.selectedCercle.$id}}</h3>
 
     <ul class="list">
       <li ng-repeat="personne in personnes | orderBy: fullname" class="item">
