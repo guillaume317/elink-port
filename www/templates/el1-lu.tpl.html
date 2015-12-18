@@ -3,13 +3,18 @@
 
     <newlink></newlink>
 
+    <ion-refresher
+      pulling-text="Tirez pour actualiser..."
+      on-refresh="doRefresh()">
+    </ion-refresher>
+
     <div ng-hide="liens[0]" class="errormessage warning">
       <div style="text-align: center">
           <h4>Pas de liens</h4>
       </div>
     </div>
 
-    <div class="item card-item" ng-repeat="lien in liens ">
+    <div class="item card-item" ng-repeat="lien in liens | filter:filter.category ">
       <div class="card stable-bg ink-dark">
         <div class="item item-avatar item-text-wrap">
 

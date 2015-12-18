@@ -18,8 +18,9 @@ angular.module('starter')
                   }
                 }, 200);
 
-                $scope.currentLien= {"url" : "", private: true};
+                $scope.currentLien= {"url" : "", "private": false};
                 $scope.alerts = [];
+                $scope.message="";
 
                 $scope.newLink = function () {
                       var myPopup = $ionicPopup.show({
@@ -36,23 +37,23 @@ angular.module('starter')
                                   $scope.message= "Mauvais format d'url";
                                   e.preventDefault();
                               } else {
-
-                                LiensService.createLinkForUser($scope.currentLien, SessionStorage.get(USERFIREBASEPROFILEKEY).uid)
-                                  .then(function (newLink) {
-                                    return "Valider";
-                                  }, function (error) {
-                                    $log.error(error);
-                                  }
-                                );
-
+                                return $scope.currentLien;
                               }
                             } // onTap
                           }, // button valider
                         ]
                       });
 
-                      myPopup.then(function (res) {
-                        console.log('Tapped!', res);
+                      myPopup.then(function (nouveauLien) {
+                        nouveauLien.private = nouveauLien.private ? "biblio": "nonlu";
+                        LiensService.createLinkForUser(nouveauLien, SessionStorage.get(USERFIREBASEPROFILEKEY).uid)
+                          .then(function (newLink) {
+                            return "Valider";
+                          })
+                          .catch (function(error) {
+                            $log.error(error);
+                          }
+                        )
                       });
 
                       $timeout(function () {

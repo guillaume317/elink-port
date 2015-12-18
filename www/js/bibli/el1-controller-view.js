@@ -4,7 +4,7 @@
         .module('el1.bibli')
         .controller('bibliController', [
             '$log', '$scope', '$rootScope', '$state',
-            'LiensService', 'GestionService', 'SessionStorage', 'USERFIREBASEPROFILEKEY',
+            'LiensService', 'GestionService', 'UsersManager', 'SessionStorage', 'USERFIREBASEPROFILEKEY',
             'liensNonLus', 'liensLus', 'allMyCercles', 'allCategories',
             '$ionicPopup',
             '$stateParams', '$timeout', 'ionicMaterialInk', 'ionicMaterialMotion',
@@ -14,18 +14,22 @@
 
     /**
      */
-    function BibliController($log, $scope, $rootScope, $state, LiensService, GestionService, SessionStorage, USERFIREBASEPROFILEKEY, liensNonLus, liensLus, allMyCercles, allCategories, $ionicPopup, $stateParams, $timeout, ionicMaterialInk, ionicMaterialMotion ) {
+    function BibliController($log, $scope, $rootScope, $state, LiensService, GestionService, UsersManager, SessionStorage, USERFIREBASEPROFILEKEY, liensNonLus, liensLus, allMyCercles, allCategories, $ionicPopup, $stateParams, $timeout, ionicMaterialInk, ionicMaterialMotion ) {
       $scope.$parent.showHeader();
       $scope.$parent.clearFabs();
       $scope.isExpanded = true;
       $scope.$parent.setExpanded(true);
       $scope.$parent.setHeaderFab('right');
 
-      $timeout(function() {
-        ionicMaterialMotion.fadeSlideIn({
-          selector: '.animate-fade-slide-in .item'
-        });
-      }, 200);
+      $scope.replayAnimation = function() {
+        $timeout(function () {
+          ionicMaterialMotion.fadeSlideIn({
+            selector: '.animate-fade-slide-in .item'
+          });
+        }, 200);
+      };
+
+      $scope.replayAnimation();
 
       // Activate ink for controller
       ionicMaterialInk.displayEffect();
@@ -37,6 +41,34 @@
       } else {
           $scope.liens = liensLus;
       }
+
+      $scope.doRefresh = function() {
+        if ($state.current.name === 'app.bibli-nonLu') {
+          LiensService.findNotReadLinksByUser(SessionStorage.get(USERFIREBASEPROFILEKEY).uid)
+            .then(function(liensNonLusRefresh) {
+                $scope.liens = liensNonLusRefresh;
+            })
+            .finally(function() {
+              // Stop the ion-refresher from spinning
+              $scope.$broadcast('scroll.refreshComplete');
+              $scope.replayAnimation();
+            });
+        } else {
+          LiensService.findReadLinksByUser(SessionStorage.get(USERFIREBASEPROFILEKEY).uid)
+            .then(function(liensLusRefresh) {
+              $scope.liens = liensLusRefresh;
+            })
+            .finally(function() {
+              // Stop the ion-refresher from spinning
+              $scope.$broadcast('scroll.refreshComplete');
+              $scope.replayAnimation();
+            });
+        }
+        UsersManager.findCerclesByUser(SessionStorage.get(USERFIREBASEPROFILEKEY).uid)
+          .then(function(cerclesRefresh) {
+            allMyCercles = cerclesRefresh;
+          });
+      };
 
       //TODO utilisation cordova-plugin-inappbrowser
       $scope.showURL= function(lien) {
@@ -64,7 +96,6 @@
             //Suppression du lien de la liste
             $scope.deleteLink(lien);
         };
-
 
         $scope.share= function(ev, lien) {
 
