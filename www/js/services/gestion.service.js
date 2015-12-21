@@ -140,13 +140,15 @@
 
         cercleLinksIndex.$loaded()
           .then(function() {
+
             var newCercle = {
               title: shareLink.title,
               teasing: shareLink.teasing,
               createdOn : Firebase.ServerValue.TIMESTAMP,
               url : shareLink.url,
               category: shareLink.category,
-              sharedBy: userConnected.google.cachedUserProfile.name
+              sharedBy: userConnected.google.cachedUserProfile.name,
+              keyOri: shareLink.keyOri
             };
             cercleLinksIndex.$add(newCercle)
               .then(function() {
