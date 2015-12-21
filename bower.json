@@ -1,8 +1,10 @@
 {
   "name": "elink",
+  "description": "elink",
   "private": "true",
+  "version": "0.1.0-0",
   "dependencies": {
-  	"ionic-material": "0.4.2",
+    "ionic-material": "0.4.2",
     "ion-md-input": "1.0.4",
     "waves": "0.6"
   },

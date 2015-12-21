@@ -15,10 +15,11 @@
     </div>
 
     <div class="item card-item" ng-repeat="lien in liens ">
-      <div class="card stable-bg  ink-dark">
-        <div class="item item-avatar item-text-wrap">
+      <div class="card stable-bg ink-dark">
 
-          <div class="ink" ng-click="showURL(lien)" >
+        <div class="item item-body item-text-wrap">
+
+          <div class="ink" ng-click="showURL(lien)">
             <h2>{{lien.title}}</h2>
             <p>{{lien.teasing}}</p>
             <p>{{lien.url.substring(0, 27)+ '...'}}</p>
@@ -27,7 +28,8 @@
           <div class="card-footer text-right">
             <button ng-click="deleteLink(lien)" class="button button-fab "><i class="icon ion-trash-a"></i></button>
             <button ng-click="moveTo(lien)" class="button button-fab "><i class="icon ion-archive"></i></button>
-            <button ng-show="canShare()" ng-click="share($event, lien)" class="button button-fab "><i class="icon ion-share"></i></button>
+            <button ng-show="canShare()" ng-click="share($event, lien)" class="button button-fab "><i
+              class="icon ion-share"></i></button>
           </div>
 
         </div>
