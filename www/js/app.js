@@ -10,9 +10,6 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ionic-material', 'io
     $ionicPlatform.ready(function() {
 
       $rootScope.userAuthenticated = false;
-/*
-      TODO
-
 
       $rootScope.$on('$stateChangeError',
         function(event, toState, toParams, fromState, fromParams, error) {
@@ -20,7 +17,8 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ionic-material', 'io
             $state.go('app.login');
           }
         });
-*/
+
+
       var config={
         "backendfirebase": "https://elink.firebaseio.com/"
       };
@@ -31,7 +29,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ionic-material', 'io
       // @Author MG
       // TODO merger à terme avec la représentation $rootScope.user
 
-      $rootScope.userConnected = {
+/**      $rootScope.userConnected = {
         $id: "Matthieu",
         email: "matthieu.guillemette@caissedesdepots.fr",
         firstname: "Matthieu",
@@ -41,16 +39,12 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ionic-material', 'io
       UsersManager.getUser("Matthieu")
         .then(function(user) {
           $rootScope.userConnected = user;
-        });
+        });*/
 
       // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
       // for form inputs)
       if (window.cordova && window.cordova.plugins.Keyboard) {
         cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
-      }
-      if (window.StatusBar) {
-        // org.apache.cordova.statusbar required
-        StatusBar.styleDefault();
       }
     });
   })

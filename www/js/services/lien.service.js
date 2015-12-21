@@ -2,12 +2,12 @@
   'use strict';
 
   angular.module('el1.services.commun')
-    .service('LiensService', ['$log', '$q', 'FBURL', '$firebaseArray', '$firebaseObject', 'Env', LiensService]);
+    .service('LiensService', ['$log', '$q', '$http', 'FBURL', '$firebaseArray', '$firebaseObject', 'Env', LiensService]);
 
   /**
    *
    */
-  function LiensService($log, $q, FBURL, $firebaseArray, $firebaseObject, Env){
+  function LiensService($log, $q, $http, FBURL, $firebaseArray, $firebaseObject, Env){
 
     var ref = new Firebase(FBURL);
 
@@ -38,16 +38,48 @@
         return deferred.promise;
       },
 
+      getImageForLink : function (lien) {
+
+        var deferred = $q.defer();
+        var _that = this;
+        var config={};
+        config.headers = config.headers || {};
+        config.headers.Accept = 'application/json';
+
+        $http.get('https://www.googleapis.com/pagespeedonline/v1/runPagespeed?url=' + newLink.url + '&screenshot=true', config)
+          .then(
+          function(data) {
+            _that.addLinkScreen(lien.$id, data)
+              .then(function() {
+                deferred.resolve(linkAdded);
+              })
+              .catch (function(error) {
+                deferred.reject(error);
+              })
+          },
+          function(error) {
+            deferred.reject(error);
+          }
+        );
+
+        return deferred.promise;
+
+      },
+
       createLinkForUser : function(lien, username) {
+
         var deferred = $q.defer();
 
         var userLinksRef;
+
         if (lien.private==="biblio") {
           userLinksRef = ref.child('usersLinks').child(username).child('read');
         } else {
           userLinksRef = ref.child('usersLinks').child(username).child('notread');
         }
+
         var userLinks = $firebaseArray(userLinksRef);
+
         userLinks.$loaded()
           .then(function () {
             var newLink = {};
@@ -57,43 +89,14 @@
             newLink.teasing = "";
 
             userLinks.$add(newLink)
-              .then(function () {
-                // on attends pas le resultat de la recup du screen
-                deferred.resolve(newLink);
+              .then(function (linkAdded) {
+                deferred.resolve(linkAdded);
               })
           })
           .catch(function (error) {
             deferred.reject(error);
           });
 
-            /**.then(function (addMe) {
-              //$log.info("push image " +addMe.key())
-
-              $.ajax({
-                url: 'https://www.googleapis.com/pagespeedonline/v1/runPagespeed?url=' + newLink.url + '&screenshot=true',
-                context: this,
-                type: 'GET',
-                dataType: 'json',
-                success: function(data) {
-                  if (data && data.screenshot && data.screenshot.data) {
-                    var linkScreens = ref.child('linkScreens').child(addMe.key());
-                    var filePayload = data.screenshot.data.replace(/_/g, '/').replace(/-/g, '+');
-                    linkScreens.set(filePayload, function () {
-                      //$log.info("recup ok");
-                    });
-                  } else
-                    $log.info("erreur lors de la recuperation du screen");
-                }
-              });
-
-            }).catch(function (error) {
-              // pas tres grave, on se passera de l'image
-              $log.info("erreur lors de la recuperation du screen");
-            });*/
-/**
-          }).catch(function (error) {
-            deferred.reject(error);
-          });*/
 
         return deferred.promise;
       },
@@ -233,6 +236,23 @@
 
         return deferred.promise;
 
+      },
+
+      addLinkScreen: function(linkId, dataScreen){
+        var deferred = $q.defer();
+
+        var linkScreenRef = ref.child('linkScreens').child(linkId);
+        var LinkScreen = $firebaseObject(linkScreenRef);
+        LinkScreen.$loaded()
+          .then(function () {
+            LinkScreen.$value = dataScreen.screenshot.data.replace(/_/g, '/').replace(/-/g, '+');
+            LinkScreen.$save();
+            deferred.resolve(LinkScreen);
+          }).catch(function (error) {
+            deferred.reject(error);
+          });
+
+        return deferred.promise;
       },
 
       /* toutes les catgories */
