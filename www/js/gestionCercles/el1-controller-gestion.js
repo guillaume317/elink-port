@@ -6,7 +6,7 @@
             '$log', '$scope', '$q', '$timeout',
             'GestionService', 'UsersManager',  'commonsService',
             'mesInvitations', 'personnesDuCercle', 'mesCercles', 'usersEmail',
-            'SessionStorage', 'USERFIREBASEPROFILEKEY',
+            'SessionStorage', 'USERFIREBASEPROFILEKEY', 'ToastManager',
             '$ionicPopup',
             'ionicMaterialInk', 'ionicMaterialMotion',
             GestionController
@@ -14,7 +14,7 @@
 
     /**
      */
-    function GestionController($log, $scope, $q, $timeout, GestionService, UsersManager, commonsService, mesInvitations, personnesDuCercle, mesCercles, usersEmail, SessionStorage, USERFIREBASEPROFILEKEY, $ionicPopup, ionicMaterialInk, ionicMaterialMotion ) {
+    function GestionController($log, $scope, $q, $timeout, GestionService, UsersManager, commonsService, mesInvitations, personnesDuCercle, mesCercles, usersEmail, SessionStorage, USERFIREBASEPROFILEKEY, ToastManager, $ionicPopup, ionicMaterialInk, ionicMaterialMotion ) {
 
         $scope.mesInvitations= mesInvitations;
         $scope.personnes= personnesDuCercle;
@@ -102,6 +102,7 @@
             myPopup.then(function(newCercle) {
               GestionService.createCercle(newCercle)
                 .then(function (cerclename) {
+                  ToastManager.displayToast('Le cercle ' + cerclename +  ' a été créé.');
                   return "Valider";
                 }, function (error) {
                   $log.error(error);
@@ -140,7 +141,8 @@
                         $scope.invitedDisplay = $scope.invited.join(', ');
                         $scope.selectedItem = null;
                         $scope.searchText = null;
-                      //TODO afficher un TOAST
+                        $scope.selectedItem = "";
+                        ToastManager.displayToast(invite.email + ' a été invité à rejoindre le cercle ' + $scope.data.selectedCercle.$id);
                     })
                     .catch(function (error) {
                         $log.error(error);
@@ -156,7 +158,7 @@
             // ==> Recharcher la liste ?
             GestionService.accepterInvitation(SessionStorage.get(USERFIREBASEPROFILEKEY).uid, invitation.$id)
                 .then(function(cerclename) {
-                  // TODO toast
+                  ToastManager.displayToast('Vous avez rejoint le cercle ' + cerclename);
                 })
                 .catch(function(error) {
                     $log.error(error);

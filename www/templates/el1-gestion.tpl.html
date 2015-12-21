@@ -1,17 +1,18 @@
 <ion-view view-title="Gestion des cercles">
   <ion-content ng-class="{expanded:isExpanded}" class="animate-fade-slide-in">
 
-    <div class="tabs tabs-dark static">
+    <div class="tabs tabs-light static">
 
       <div class="tab-item">
         <select ng-model="data.selectedCercle"
                 ng-change="changeCercle()"
                 ng-options="aCercle.$id for aCercle in cercles track by aCercle.$id">
         </select>
+        &nbsp;
       </div>
 
       <div class="tab-item">
-          <button ng-click="nouveauCercle($event)" class=" button button-flat bg-primary ">Nouveau</button>
+          <button ng-click="nouveauCercle($event)" class=" button button-flat bg-primary">Nouveau</button>
       </div>
 
 

@@ -68,27 +68,39 @@
       <div class="item card-item" ng-repeat="lien in allLiens | filter:{category:filter.category} ">
 
         <div class="card stable-bg ink-dark">
-          <div class="item item-avatar item-text-wrap">
+
+
+          <div class="item item-body item-text-wrap">
 
             <div class="ink" ng-click="showURL(lien)">
-              <h2>{{lien.title}}</h2>
-
+              <h2 style="color: #B71C1C">{{lien.title}}</h2>
               <p>{{lien.teasing}}</p>
-
-              <p>
+              <p style="color: #B71C1C">
                 <b>{{lien.category}}</b>
               </p>
-
+              <p>
+                <i class="icon ion-person"></i> partagé par {{lien.sharedBy}}
+              </p>
             </div>
 
-            <div class="card-footer text-right">
+            <div class="item">
+              <div class="row">
+                <div class="col col-50">
+                  <button ng-click="moveToBiblio(lien)" class=" button button-fab "><i class="icon ion-archive"></i></button>
+                </div>
+                <div class="col col-50">
+                  <button ng-click="like(lien)" class=" button button-fab "><i class="icon ion-thumbsup"></i></button>
+                </div>
+              </div>
+            </div>
+            <!--div class="card-footer text-right">
               <div class="text-right">
                 <span class="pull-left">   partagé par  <i class="icon ion-person"></i> {{lien.sharedBy}}</span>
                 <button ng-click="moveToBiblio(lien)" class=" button button-fab "><i class="icon ion-archive"></i>
                 </button>
                 <button ng-click="like(lien)" class=" button button-fab "><i class="icon ion-thumbsup"></i></button>
               </div>
-            </div>
+            </div-->
 
           </div>
         </div>

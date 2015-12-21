@@ -8,8 +8,8 @@ angular.module('starter')
             template:
               '<button id="fab-newLink" ng-click="newLink()" class="button button-fab button-fab-top-left expanded button-energized-900 drop"><i class="icon ion-plus-round"></i></button>',
 
-			controller: ['$scope', '$log', '$rootScope', 'LiensService', 'commonsService', 'SessionStorage', 'USERFIREBASEPROFILEKEY', '$ionicPopup', '$timeout',
-	            function($scope, $log, $rootScope, LiensService, commonsService, SessionStorage, USERFIREBASEPROFILEKEY, $ionicPopup, $timeout) {
+			controller: ['$scope', '$log', '$rootScope', 'LiensService', 'commonsService', 'SessionStorage', 'USERFIREBASEPROFILEKEY', 'ToastManager', '$ionicPopup', '$timeout',
+	            function($scope, $log, $rootScope, LiensService, commonsService, SessionStorage, USERFIREBASEPROFILEKEY, ToastManager, $ionicPopup, $timeout) {
                 $log.info("directive newLink")
 
                 $timeout(function() {
@@ -48,6 +48,7 @@ angular.module('starter')
                         nouveauLien.private = nouveauLien.private ? "biblio": "nonlu";
                         LiensService.createLinkForUser(nouveauLien, SessionStorage.get(USERFIREBASEPROFILEKEY).uid)
                           .then(function (newLink) {
+                            ToastManager.displayToast("Le lien a été ajouté dans l'espace courant");
                             return "Valider";
                           })
                           .catch (function(error) {
