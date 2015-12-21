@@ -21,7 +21,7 @@
           <div class="ink" ng-click="showURL(lien)" >
             <h2>{{lien.title}}</h2>
             <p>{{lien.teasing}}</p>
-            <p>{{lien.url}}</p>
+            <p>{{lien.url.substring(0, 27)+ '...'}}</p>
           </div>
 
           <div class="card-footer text-right">
