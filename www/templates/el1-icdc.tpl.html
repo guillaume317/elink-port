@@ -32,7 +32,7 @@
       on-refresh="doRefresh()">
     </ion-refresher>
 
-    <div class="List">
+    <div class="list animate-fade-slide-in-right">
 
       <label class="item item-input item-select">
         <div class="input-label">
@@ -47,21 +47,16 @@
       </label>
 
       <div class="item card-item" ng-repeat="like in topTen | filter:filter.category | orderBy: '-cpt' ">
-
         <div class="card stable-bg ink-dark">
 
           <div class="item item-body item-text-wrap">
             <div class="ink" ng-click="showURL(like.link)">
-              <h2 style="color: #B71C1C">{{like.link.title}}</h2>
+              <h2 style="color: #B71C1C">{{like.link.title}} (<i class="icon ion-heart"></i> {{like.cpt}})</h2>
 
               <p>{{like.link.teasing}}</p>
 
               <p>
-                <b>{{like.link.category}}</b>
-              </p>
-
-              <p style="color: #B71C1C">
-                <i class="icon ion-thumbsup"></i>&nbsp;<span class="subdued">{{like.cpt}} Like</span>
+                <strong><i class="icon ion-android-bookmark"></i> </strong>{{like.link.category}}</strong>
               </p>
 
               <p>
@@ -85,6 +80,7 @@
           </div-->
         </div>
       </div>
+
     </div>
 
   </ion-content>

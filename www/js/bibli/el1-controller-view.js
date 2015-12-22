@@ -35,6 +35,12 @@
     $scope.$parent.setExpanded(true);
     $scope.$parent.setHeaderFab('right');
 
+    $timeout(function() {
+      ionicMaterialMotion.fadeSlideIn({
+        selector: '.animate-fade-slide-in .item'
+      });
+    }, 200);
+
     $scope.replayAnimation = function () {
       $timeout(function () {
         ionicMaterialMotion.fadeSlideIn({

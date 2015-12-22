@@ -1,7 +1,8 @@
 <ion-view view-title="Biblio">
+
   <ion-content ng-class="{expanded:isExpanded}" class="animate-fade-slide-in">
 
-    <newlink></newlink>
+    <!--newlink></newlink-->
 
     <ion-refresher
       pulling-text="Tirez pour actualiser..."
@@ -21,15 +22,16 @@
 
           <div class="ink" ng-click="showURL(lien)">
             <p>
-              <div>
-                <h2 style="color: #B71C1C">{{lien.title}}</h2>
-              </div>
-              <div ng-if="lien.teasing && lien.teasing.length>0">
-                <span style="color: #E57373">{{lien.teasing}}</span>
-              </div>
-              <div>
-                <span style="color: #E57373"><i>{{lien.url.substring(0, 60)}}</i></span>
-              </div>
+
+            <div>
+              <h2 style="color: #B71C1C">{{lien.title}}</h2>
+            </div>
+            <div ng-if="lien.teasing && lien.teasing.length>0">
+              <span style="color: #E57373">{{lien.teasing}}</span>
+            </div>
+            <div>
+              <span style="color: #E57373"><i class="icon ion-link"></i> {{lien.url.substring(0, 60)}}</span>
+            </div>
             </p>
           </div>
         </div>
