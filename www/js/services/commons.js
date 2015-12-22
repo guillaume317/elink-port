@@ -7,7 +7,30 @@
         .service('ToastManager', ['$cordovaToast', ToastManager])
         .factory('FBFactory', ['$firebaseAuth', '$firebaseArray', 'FBURL', FBFactory])
         .factory('LocalStorage', [LocalStorage])
-        .factory('SessionStorage', [SessionStorage]);
+        .factory('SessionStorage', [SessionStorage])
+        .factory('Loader', ['$ionicLoading', '$timeout', Loader]);
+
+
+
+    function Loader($ionicLoading, $timeout) {
+      return {
+        show: function(message) {
+          $ionicLoading.show({
+            template: (message || 'Chargement en cours ...')
+          });
+        },
+        hide: function() {
+          $ionicLoading.hide();
+        },
+        toggle: function(text, timeout) {
+          var that = this;
+          that.show(text);
+          $timeout(function() {
+            that.hide();
+          }, timeout || 3000);
+        }
+      };
+    }
 
     function ToastManager ($cordovaToast) {
       this.displayToast = function (message) {

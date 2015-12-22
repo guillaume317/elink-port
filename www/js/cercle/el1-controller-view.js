@@ -4,7 +4,7 @@
     .module('el1.cercle')
     .controller('cercleController', [
       '$log', '$scope', '$state',
-      'LiensService', 'SessionStorage', 'USERFIREBASEPROFILEKEY', 'ToastManager',
+      'LiensService', 'SessionStorage', 'USERFIREBASEPROFILEKEY', 'ToastManager', 'Loader',
       'liens',
       'allCategories',
       'allMyCercles',
@@ -17,17 +17,17 @@
       'allCategories',
       'topTen',
       'SessionStorage',
-      'USERFIREBASEPROFILEKEY','ToastManager', '$timeout', 'ionicMaterialInk', 'ionicMaterialMotion',
+      'USERFIREBASEPROFILEKEY','ToastManager', 'Loader', '$timeout', 'ionicMaterialInk', 'ionicMaterialMotion',
       ICDCController
     ])
   ;
 
   /**
    */
-  function CercleController($log, $scope, $state, LiensService, SessionStorage, USERFIREBASEPROFILEKEY, ToastManager, liens, allCategories, allMyCercles, $stateParams, $timeout, ionicMaterialInk, ionicMaterialMotion) {
+  function CercleController($log, $scope, $state, LiensService, SessionStorage, USERFIREBASEPROFILEKEY, ToastManager, Loader, liens, allCategories, allMyCercles, $stateParams, $timeout, ionicMaterialInk, ionicMaterialMotion) {
 
     //on masque la mire de loading
-    $scope.hideOverlay();
+    Loader.hide();
 
     $scope.$parent.showHeader();
     $scope.$parent.clearFabs();
@@ -100,10 +100,10 @@
 
   /**
    */
-  function ICDCController($log, $scope, LiensService, allCategories, topTen, SessionStorage, USERFIREBASEPROFILEKEY, ToastManager, $timeout, ionicMaterialInk, ionicMaterialMotion) {
+  function ICDCController($log, $scope, LiensService, allCategories, topTen, SessionStorage, USERFIREBASEPROFILEKEY, ToastManager, Loader, $timeout, ionicMaterialInk, ionicMaterialMotion) {
 
     //on masque la mire de loading
-    $scope.hideOverlay();
+    Loader.hide();
 
     $scope.$parent.showHeader();
     $scope.$parent.clearFabs();
@@ -116,7 +116,7 @@
         ionicMaterialMotion.fadeSlideIn({
           selector: '.animate-fade-slide-in .item'
         });
-      }, 200);
+      }, 500);
     };
     // Activate ink for controller
     ionicMaterialInk.displayEffect();

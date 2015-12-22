@@ -62,12 +62,18 @@ select {
   font-size: 80%;
 }
 
+.app-bg {
+  background-color: #EF5350;
+}
 .menu-open .force-footer-bar-heigth.expanded {
   background-color: #EF5350;
 }
 
-.bar.bar-header.expanded {
+.menu-open .bar.bar-header.expanded {
   background-color: #EF5350;
+}
+.menu .bar.bar-header.expanded {
+  transition: all .5s ease-in-out;
 }
 
 .menu .avatar {
@@ -93,10 +99,14 @@ select {
   content: "\f2ca";
 }
 
-.menu .bar.bar-header.expanded {
-  transition: all .5s ease-in-out;
-}
-
 .input-label {
   z-index: 9 !important;
+}
+
+.item h2 {
+  color: #B71C1C;
+}
+
+h3, .h3 {
+  font-size: 16px;
 }

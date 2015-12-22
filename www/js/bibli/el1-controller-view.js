@@ -4,7 +4,7 @@
     .module('el1.bibli')
     .controller('bibliController', [
       '$log', '$scope', '$rootScope', '$state',
-      'LiensService', 'GestionService', 'UsersManager', 'SessionStorage', 'USERFIREBASEPROFILEKEY', 'ToastManager',
+      'LiensService', 'GestionService', 'UsersManager', 'SessionStorage', 'USERFIREBASEPROFILEKEY', 'ToastManager', 'Loader',
       'liensNonLus', 'liensLus', 'allMyCercles', 'allCategories',
       '$ionicPopup',
       '$stateParams', '$timeout', 'ionicMaterialInk', 'ionicMaterialMotion', '$cordovaDialogs',
@@ -14,15 +14,20 @@
 
   /**
    */
-  function BibliController($log, $scope, $rootScope, $state, LiensService, GestionService, UsersManager, SessionStorage, USERFIREBASEPROFILEKEY, ToastManager, liensNonLus, liensLus, allMyCercles, allCategories, $ionicPopup, $stateParams, $timeout, ionicMaterialInk, ionicMaterialMotion, $cordovaDialogs) {
+  function BibliController($log, $scope, $rootScope, $state, LiensService, GestionService, UsersManager, SessionStorage, USERFIREBASEPROFILEKEY, ToastManager, Loader, liensNonLus, liensLus, allMyCercles, allCategories, $ionicPopup, $stateParams, $timeout, ionicMaterialInk, ionicMaterialMotion, $cordovaDialogs) {
 
     //on masque la mire de loading
-    $rootScope.hideOverlay();
+    Loader.hide();
 
     //Pour les badges du menu de droite
     $rootScope.countNonLu = liensNonLus.length;
     $rootScope.countBiblio = liensLus.length;
     $rootScope.countCercle = allMyCercles.length;
+
+    $scope.recount = function() {
+      $rootScope.countNonLu = liensNonLus.length;
+      $rootScope.countBiblio = liensLus.length;
+    };
 
     $scope.$parent.showHeader();
     $scope.$parent.clearFabs();
@@ -97,6 +102,7 @@
           if (choix === 1) {
             // $scope.liens est synchronisé avec la base
             $scope.liens.$remove(lien).then(function () {
+              $scope.recount();
               ToastManager.displayToast("Le lien a été supprimé");
             });
           }
@@ -114,16 +120,13 @@
       if ($state.current.name === 'app.bibli-nonLu') {
         //Ajout dans biblio
         liensLus.$add(lien);
-        ++$rootScope.countBiblio;
-        --$rootScope.countNonLu;
       } else {
         //Ajout dans non lus
         liensNonLus.$add(lien);
-        ++$rootScope.countNonLu;
-        --$rootScope.countBiblio;
       }
       //Suppression du lien de la liste
       $scope.liens.$remove(lien).then(function() {
+        $scope.recount();
         ToastManager.displayToast("Le lien a été déplacé !");
       });
       //$scope.deleteLink(lien);
@@ -178,7 +181,7 @@
         //Récupération du lien ajouté
         GestionService.shareLien(shareLink, SessionStorage.get(USERFIREBASEPROFILEKEY))
           .then(function () {
-            $scope.liens.$remove(lien);
+            $scope.liens.$remove(lien).then(function() {$scope.recount();});
             ToastManager.displayToast("Le lien a été partagé avec le cercle " + shareLink.cercleName);
             return "Valider";
           })
