@@ -6,47 +6,76 @@
 // 'starter.controllers' is found in controllers.js
 angular.module('starter', ['ionic', 'starter.controllers', 'ionic-material', 'ionMdInput', 'ion-autocomplete', 'ngCordova', 'firebase', 'el1.login', 'el1.gestion', 'el1.truc', 'el1.cercle', 'el1.bibli', 'el1.model', 'el1.services.commun'])
 
-  .run(function($ionicPlatform, Env, UsersManager,  $rootScope) {
+  .run(function($ionicPlatform, Env, UsersManager,  $rootScope, $cordovaNetwork, $cordovaSplashscreen, $cordovaAppVersion, $cordovaDevice, $cordovaStatusbar, $ionicLoading, $state) {
+
     $ionicPlatform.ready(function() {
 
-      $rootScope.userAuthenticated = false;
-
-      $rootScope.$on('$stateChangeError',
-        function(event, toState, toParams, fromState, fromParams, error) {
-          if (error === 'AUTH_REQUIRED') {
-            $state.go('app.login');
-          }
-        });
-
-
-      var config={
-        "backendfirebase": "https://elink.firebaseio.com/"
-      };
-      Env.init(config);
-
-
-      //Extraction de l'utilisateur connecté / Matthieu par défaut
-      // @Author MG
-      // TODO merger à terme avec la représentation $rootScope.user
-
-/**      $rootScope.userConnected = {
-        $id: "Matthieu",
-        email: "matthieu.guillemette@caissedesdepots.fr",
-        firstname: "Matthieu",
-        fullname: "Matthieu Guillemette",
-        lastname: "Guillemette"
-      };
-      UsersManager.getUser("Matthieu")
-        .then(function(user) {
-          $rootScope.userConnected = user;
-        });*/
-
-      // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
-      // for form inputs)
-      if (window.cordova && window.cordova.plugins.Keyboard) {
+      //Traitement plugion android
+      if (window.cordova && window.cordova.plugins && window.cordova.plugins.Keyboard) {
         cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
+        cordova.plugins.Keyboard.disableScroll(true);
       }
+
+      $cordovaStatusbar.overlaysWebView(true);
+      $cordovaStatusbar.styleHex('#E53935');
+
+      // ** A l'écoute du réseau */
+      $rootScope.networkOnLine = $cordovaNetwork.isOnline();
+
+      $rootScope.$on('$cordovaNetwork:online', function (event, networkState) {
+        $rootScope.networkOnLine = true;
+      });
+
+      $rootScope.$on('$cordovaNetwork:offline', function (event, networkState) {
+        $rootScope.networkOnLine = false;
+      });
+
+      /** Recherche d'information sur le device */
+      $cordovaAppVersion.getVersionNumber().then(function (version) {
+        $rootScope.versionNumber = version;
+      });
+
+      $cordovaAppVersion.getVersionCode().then(function (build) {
+        $rootScope.versionCode = build;
+      });
+
+      $rootScope.myDevice = $cordovaDevice.getPlatform() + " - " + $cordovaDevice.getVersion() + " - " + $cordovaDevice.getModel() + " - " + $cordovaDevice.getUUID();
+
+      $rootScope.showOverlay = function (message) {
+        $ionicLoading.show({
+          template: message
+        });
+      };
+
+      $rootScope.hideOverlay = function () {
+        $ionicLoading.hide();
+      };
+
+      $rootScope.loadTargetState = function(targetState) {
+        $rootScope.showOverlay("Extraction des données en cours...")
+        $state.go(targetState);
+      }
+
+      //on masque le spashscreen
+      $cordovaSplashscreen.hide();
+
     });
+
+    $rootScope.userAuthenticated = false;
+
+    $rootScope.$on('$stateChangeError',
+      function(event, toState, toParams, fromState, fromParams, error) {
+        if (error === 'AUTH_REQUIRED') {
+          $state.go('app.login');
+        }
+      });
+
+    var config={
+      "backendfirebase": "https://elink.firebaseio.com/"
+    };
+    Env.init(config);
+
+
   })
 
   .constant('RESTBACKEND', 'http://localhost:8080/banconet/api/v1')

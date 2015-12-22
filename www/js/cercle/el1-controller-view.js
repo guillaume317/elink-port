@@ -4,7 +4,7 @@
     .module('el1.cercle')
     .controller('cercleController', [
       '$log', '$scope', '$state',
-      'LiensService', 'SessionStorage', 'USERFIREBASEPROFILEKEY',
+      'LiensService', 'SessionStorage', 'USERFIREBASEPROFILEKEY', 'ToastManager',
       'liens',
       'allCategories',
       'allMyCercles',
@@ -17,14 +17,18 @@
       'allCategories',
       'topTen',
       'SessionStorage',
-      'USERFIREBASEPROFILEKEY','$timeout', 'ionicMaterialInk', 'ionicMaterialMotion',
+      'USERFIREBASEPROFILEKEY','ToastManager', '$timeout', 'ionicMaterialInk', 'ionicMaterialMotion',
       ICDCController
     ])
   ;
 
   /**
    */
-  function CercleController($log, $scope, $state, LiensService, SessionStorage, USERFIREBASEPROFILEKEY, liens, allCategories, allMyCercles, $stateParams, $timeout, ionicMaterialInk, ionicMaterialMotion) {
+  function CercleController($log, $scope, $state, LiensService, SessionStorage, USERFIREBASEPROFILEKEY, ToastManager, liens, allCategories, allMyCercles, $stateParams, $timeout, ionicMaterialInk, ionicMaterialMotion) {
+
+    //on masque la mire de loading
+    $scope.hideOverlay();
+
     $scope.$parent.showHeader();
     $scope.$parent.clearFabs();
     $scope.isExpanded = true;
@@ -54,10 +58,6 @@
         "selectedCercle" : allMyCercles[0]
       };
     }
-    // Activate ink for controller
-    ionicMaterialInk.displayEffect();
-
-
     $scope.replayAnimation();
 
 
@@ -75,13 +75,20 @@
 
 
     $scope.like = function (alink) {
-      LiensService.addLike($scope.data.selectedCercle.$id, alink.$id);
+      LiensService.addLike($scope.data.selectedCercle.$id, alink.$id)
+        .then(function(cercleLinkLike){
+          ToastManager.displayToast("Le lien a été liké !");
+        });
+
     };
 
 
     $scope.moveToBiblio = function (alink) {
       alink.private = "biblio";
-      LiensService.createLinkForUser(alink, SessionStorage.get(USERFIREBASEPROFILEKEY).uid);
+      LiensService.createLinkForUser(alink, SessionStorage.get(USERFIREBASEPROFILEKEY).uid)
+        .then(function(lienAdded){
+          ToastManager.displayToast("Le lien a été déplacé dans l'espace Biblio");
+        })
     };
 
     $scope.showURL = function (alink) {
@@ -93,7 +100,10 @@
 
   /**
    */
-  function ICDCController($log, $scope, LiensService, allCategories, topTen, SessionStorage, USERFIREBASEPROFILEKEY, $timeout, ionicMaterialInk, ionicMaterialMotion) {
+  function ICDCController($log, $scope, LiensService, allCategories, topTen, SessionStorage, USERFIREBASEPROFILEKEY, ToastManager, $timeout, ionicMaterialInk, ionicMaterialMotion) {
+
+    //on masque la mire de loading
+    $scope.hideOverlay();
 
     $scope.$parent.showHeader();
     $scope.$parent.clearFabs();
@@ -136,7 +146,10 @@
 
     $scope.moveToBiblio = function (alink) {
       alink.private = "biblio";
-      LiensService.createLinkForUser(alink, SessionStorage.get(USERFIREBASEPROFILEKEY).uid);
+      LiensService.createLinkForUser(alink, SessionStorage.get(USERFIREBASEPROFILEKEY).uid)
+        .then(function(lienAdded){
+          ToastManager.displayToast("Le lien a été déplacé dans l'espace Biblio");
+        })
     };
 
     //TODO in app browser plugin

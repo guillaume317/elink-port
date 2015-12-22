@@ -2,39 +2,6 @@
 
   <ion-content ng-class="{expanded:isExpanded}" class="animate-fade-slide-in">
 
-    <!--newlink></newlink-->
-
-    <!--div class="tabs tabs-dark tabs-icon-top static">
-
-      <div class="tab-item">
-        <label class="item item-input item-select">
-          <div class="input-label">
-            Catégorie
-          </div>
-          <select ng-model="filter.category">
-            <option value="">Toutes</option>
-            <option ng-repeat="cat in categories" value="{{cat}}">
-              {{cat}}
-            </option>
-          </select>
-        </label>
-      </div>
-
-      <div class="tab-item">
-        <label class="item item-input item-select">
-          <div class="input-label">
-            Cercle
-          </div>
-          <select ng-model="data.selectedCercle"
-                  ng-change="changeCercle()"
-                  ng-options="aCercle.$id for aCercle in cercles track by aCercle.$id">
-          </select>
-        </label>
-      </div>
-
-    </div-->
-
-
     <div ng-hide="allLiens[0]" class="errormessage warning">
       <div style="text-align: center">
         <h4>Pas de liens</h4>
@@ -68,29 +35,32 @@
       <div class="item card-item" ng-repeat="lien in allLiens | filter:{category:filter.category} ">
 
         <div class="card stable-bg ink-dark">
-          <div class="item item-avatar item-text-wrap">
+
+          <div class="item item-body item-text-wrap">
 
             <div class="ink" ng-click="showURL(lien)">
-              <h2>{{lien.title}}</h2>
-
+              <h2 style="color: #B71C1C">{{lien.title}}</h2>
               <p>{{lien.teasing}}</p>
-
-              <p>
+              <p style="color: #B71C1C">
                 <b>{{lien.category}}</b>
               </p>
-
+              <p>
+                <i class="icon ion-person"></i> {{lien.sharedBy}}
+              </p>
             </div>
-
-            <div class="card-footer text-right">
-              <div class="text-right">
-                <span class="pull-left">   partagé par  <i class="icon ion-person"></i> {{lien.sharedBy}}</span>
-                <button ng-click="moveToBiblio(lien)" class=" button button-fab "><i class="icon ion-archive"></i>
-                </button>
-                <button ng-click="like(lien)" class=" button button-fab "><i class="icon ion-thumbsup"></i></button>
-              </div>
-            </div>
-
           </div>
+
+          <div class="item tabs tabs-secondary tabs-icon-left">
+            <a class="tab-item" href="#" on-tap="moveToBiblio(lien)">
+              <i class="icon ion-archive"></i> Biblio
+            </a>
+            <a class="tab-item" href="#" on-tap="like(lien)">
+              <i class="icon ion-thumbsup"></i> Like
+            </a>
+            <!--button ng-click="moveToBiblio(lien)" class=" button button-fab "><i class="icon ion-archive"></i></button>
+            <button ng-click="like(lien)" class=" button button-fab "><i class="icon ion-thumbsup"></i></button-->
+          </div>
+
         </div>
       </div>
 

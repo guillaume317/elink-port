@@ -4,17 +4,26 @@
     .module('el1.bibli')
     .controller('bibliController', [
       '$log', '$scope', '$rootScope', '$state',
-      'LiensService', 'GestionService', 'UsersManager', 'SessionStorage', 'USERFIREBASEPROFILEKEY',
+      'LiensService', 'GestionService', 'UsersManager', 'SessionStorage', 'USERFIREBASEPROFILEKEY', 'ToastManager',
       'liensNonLus', 'liensLus', 'allMyCercles', 'allCategories',
       '$ionicPopup',
-      '$stateParams', '$timeout', 'ionicMaterialInk', 'ionicMaterialMotion',
+      '$stateParams', '$timeout', 'ionicMaterialInk', 'ionicMaterialMotion', '$cordovaDialogs',
       BibliController
     ]);
 
 
   /**
    */
-  function BibliController($log, $scope, $rootScope, $state, LiensService, GestionService, UsersManager, SessionStorage, USERFIREBASEPROFILEKEY, liensNonLus, liensLus, allMyCercles, allCategories, $ionicPopup, $stateParams, $timeout, ionicMaterialInk, ionicMaterialMotion) {
+  function BibliController($log, $scope, $rootScope, $state, LiensService, GestionService, UsersManager, SessionStorage, USERFIREBASEPROFILEKEY, ToastManager, liensNonLus, liensLus, allMyCercles, allCategories, $ionicPopup, $stateParams, $timeout, ionicMaterialInk, ionicMaterialMotion, $cordovaDialogs) {
+
+    //on masque la mire de loading
+    $rootScope.hideOverlay();
+
+    //Pour les badges du menu de droite
+    $rootScope.countNonLu = liensNonLus.length;
+    $rootScope.countBiblio = liensLus.length;
+    $rootScope.countCercle = allMyCercles.length;
+
     $scope.$parent.showHeader();
     $scope.$parent.clearFabs();
     $scope.isExpanded = true;
@@ -80,8 +89,18 @@
     };
 
     $scope.deleteLink = function (lien) {
-      // $scope.liens est synchronisé avec la base
-      $scope.liens.$remove(lien);
+
+      //Demande confirmation suppression du lien
+      $cordovaDialogs.confirm('Confirmez-vous la suppression de ce lien ?', 'Attention', ['Confirmer', 'Annuler']).then(
+        function (choix) {
+          // Choix -> Integer: 0 - no button, 1 - button 1, 2 - button 2
+          if (choix === 1) {
+            // $scope.liens est synchronisé avec la base
+            $scope.liens.$remove(lien).then(function () {
+              ToastManager.displayToast("Le lien a été supprimé");
+            });
+          }
+        });
     };
 
     $scope.moveTo = function (lien) {
@@ -95,12 +114,19 @@
       if ($state.current.name === 'app.bibli-nonLu') {
         //Ajout dans biblio
         liensLus.$add(lien);
+        ++$rootScope.countBiblio;
+        --$rootScope.countNonLu;
       } else {
         //Ajout dans non lus
         liensNonLus.$add(lien);
+        ++$rootScope.countNonLu;
+        --$rootScope.countBiblio;
       }
       //Suppression du lien de la liste
-      $scope.deleteLink(lien);
+      $scope.liens.$remove(lien).then(function() {
+        ToastManager.displayToast("Le lien a été déplacé !");
+      });
+      //$scope.deleteLink(lien);
     };
 
     $scope.share = function (ev, lien) {
@@ -153,6 +179,7 @@
         GestionService.shareLien(shareLink, SessionStorage.get(USERFIREBASEPROFILEKEY))
           .then(function () {
             $scope.liens.$remove(lien);
+            ToastManager.displayToast("Le lien a été partagé avec le cercle " + shareLink.cercleName);
             return "Valider";
           })
           .catch(function (error) {

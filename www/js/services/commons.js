@@ -4,9 +4,17 @@
     angular.module('el1.services.commun')
         .service('commonsService', ['$q', '$http', CommonsService])
         .service('EscapeUtils', EscapeUtils)
+        .service('ToastManager', ['$cordovaToast', ToastManager])
         .factory('FBFactory', ['$firebaseAuth', '$firebaseArray', 'FBURL', FBFactory])
         .factory('LocalStorage', [LocalStorage])
         .factory('SessionStorage', [SessionStorage]);
+
+    function ToastManager ($cordovaToast) {
+      this.displayToast = function (message) {
+        $cordovaToast.showLongBottom(message);
+      }
+    }
+
 
     function EscapeUtils() {
 
