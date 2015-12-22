@@ -14,7 +14,7 @@
     <ion-nav-view name="menuContent" ng-class="{expanded: isExpanded}"></ion-nav-view>
   </ion-side-menu-content>
   <ion-side-menu side="right">
-    <ion-header-bar style="background-color: #EF5350" class="expanded">
+    <ion-header-bar class="app-bg expanded">
       <span class="avatar motion spin fade" style="background: url('img/logo.jpg'); background-size: cover;"></span>
       <h2>eLink</h2>
     </ion-header-bar>
@@ -32,13 +32,13 @@
         <ion-item nav-clear menu-close ng-show="userAuthenticated" on-tap="loadTargetState('app.bibli-lu')">
           <strong>Biblio</strong><span class="badge badge-assertive">{{countBiblio}}</span>
         </ion-item>
-        <ion-item nav-clear menu-close  ng-show="userAuthenticated" on-tap="loadTargetState('app.cercle-view')">
+        <ion-item nav-clear menu-close ng-show="userAuthenticated" on-tap="loadTargetState('app.cercle-view')">
           <strong>Cercle</strong><span class="badge badge-assertive">{{countCercle}}</span>
         </ion-item>
         <ion-item nav-clear menu-close ng-show="userAuthenticated" on-tap="loadTargetState('app.icdc-view')">
           <strong>Top Ten</strong>
         </ion-item>
-        <ion-item nav-clear menu-close  ng-show="userAuthenticated" on-tap="loadTargetState('app.gestion-view')">
+        <ion-item nav-clear menu-close ng-show="userAuthenticated" on-tap="loadTargetState('app.gestion-view')">
           <strong>Gérer mes cercles</strong>
         </ion-item>
       </ion-list>

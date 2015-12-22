@@ -16,7 +16,7 @@ angular.module('el1.login', ['ionic', 'ionic-material', 'ionMdInput', 'el1.servi
 
   })
 
-  .controller('LoginCtrl', function ($q, $state, $rootScope, $scope, $log, FBURL, $firebaseAuth, GOOGLEAUTHSCOPE, UsersManager, $timeout, $stateParams, ionicMaterialInk) {
+  .controller('LoginCtrl', function ($q, $state, $rootScope, $scope, $log, FBURL, $firebaseAuth, GOOGLEAUTHSCOPE, UsersManager, Loader, $timeout, $stateParams, ionicMaterialInk) {
 
     $scope.$parent.clearFabs();
 
@@ -32,7 +32,7 @@ angular.module('el1.login', ['ionic', 'ionic-material', 'ionMdInput', 'el1.servi
     $scope.login = function () {
 
 
-      $rootScope.showOverlay("Authentification en cours...");
+      Loader.show("Authentification en cours...");
 
       // login with Google
       // Récupération d'un objet de ce type :
@@ -85,7 +85,7 @@ angular.module('el1.login', ['ionic', 'ionic-material', 'ionMdInput', 'el1.servi
           $log.info("Authentication failed:", error);
         })
         .finally(function() {
-          $rootScope.hideOverlay();
+          Loader.hide();
         });
     }
 

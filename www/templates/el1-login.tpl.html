@@ -2,34 +2,34 @@
   <ion-content>
 
     <div class="hero flat">
-
       <div class="content">
       </div>
     </div>
 
     <div class="list card">
 
+      <div class="item item-avatar">
+        <img src="img/logo.jpg">
+        <h2>Application <i>eLink</i></h2>
+        <p>ICDC DEI CCMT</p>
+      </div>
+
       <div class="item item-body">
-        <div class="row">
-          <div class="col col-25"><img src="img/arton.jpg"></div>
-          <div class="col"><p style="text-align: justify">eLink reprend le principe des applications de partage d'informations et participe à une
+        <span style="text-align: justify">eLink reprend le principe des applications de partage d'informations et participe à une
             veille collaborative.
             Vous pouvez partager et échanger les meilleurs articles du web et lire leur contenu sur desktop ou mobile.
             <br/>
-            Pour utiliser l'application, vous devez vous authentifier avec Google.
-          </p></div>
-        </div>
+            Pour utiliser l'application, vous devez vous authentifier au préalable avec votre compte Google.
+            <span> style="color: #EF5350"><strong>L'authentification n'est proposée que s'il y a du réseau !</strong></span>
+        </p>
       </div>
-      <div class="item tabs tabs-secondary tabs-icon-left">
+
+      <div ng-if="networkOnLine" class="item tabs tabs-secondary tabs-icon-left">
         <button ng-click="login()" class="button button-full button-assertive ink">S'authentifier avec <i class="icon ion-social-googleplus"></i></button>
       </div>
+
     </div>
 
-
-
-    <!--div class="padding">
-      <button ng-click="login()" class="button button-full button-assertive ink">S'authentifier avec Google !</button>
-    </div-->
 
   </ion-content>
 </ion-view>
