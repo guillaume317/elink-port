@@ -25,6 +25,10 @@
   /**
    */
   function CercleController($log, $scope, $state, LiensService, SessionStorage, USERFIREBASEPROFILEKEY, ToastManager, liens, allCategories, allMyCercles, $stateParams, $timeout, ionicMaterialInk, ionicMaterialMotion) {
+
+    //on masque la mire de loading
+    $scope.hideOverlay();
+
     $scope.$parent.showHeader();
     $scope.$parent.clearFabs();
     $scope.isExpanded = true;
@@ -97,6 +101,9 @@
   /**
    */
   function ICDCController($log, $scope, LiensService, allCategories, topTen, SessionStorage, USERFIREBASEPROFILEKEY, ToastManager, $timeout, ionicMaterialInk, ionicMaterialMotion) {
+
+    //on masque la mire de loading
+    $scope.hideOverlay();
 
     $scope.$parent.showHeader();
     $scope.$parent.clearFabs();

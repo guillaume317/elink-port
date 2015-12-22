@@ -49,6 +49,7 @@ angular.module('starter')
                         LiensService.createLinkForUser(nouveauLien, SessionStorage.get(USERFIREBASEPROFILEKEY).uid)
                           .then(function (newLink) {
                             ToastManager.displayToast("Le lien a été ajouté dans l'espace courant");
+                            $scope.$parent.replayAnimation();
                             return "Valider";
                           })
                           .catch (function(error) {

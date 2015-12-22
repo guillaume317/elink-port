@@ -16,7 +16,10 @@
      */
     function GestionController($log, $scope, $q, $timeout, GestionService, UsersManager, commonsService, mesInvitations, personnesDuCercle, mesCercles, usersEmail, SessionStorage, USERFIREBASEPROFILEKEY, ToastManager, $ionicPopup, ionicMaterialInk, ionicMaterialMotion ) {
 
-        $scope.mesInvitations= mesInvitations;
+      //on masque la mire de loading
+      $scope.hideOverlay();
+
+      $scope.mesInvitations= mesInvitations;
         $scope.personnes= personnesDuCercle;
         $scope.cercles= mesCercles;
         $scope.users = usersEmail;

@@ -12,7 +12,7 @@
     /**
      */
     function AccueilController($log, $scope, $rootScope, $state, $stateParams, $timeout, ionicMaterialInk, ionicMaterialMotion ) {
-      $log.info("couou")
+      $log.info("AccueilController")
 
       $scope.$parent.showHeader();
       $scope.$parent.clearFabs();

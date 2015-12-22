@@ -49,62 +49,43 @@
       <div class="item card-item" ng-repeat="like in topTen | filter:filter.category | orderBy: '-cpt' ">
 
         <div class="card stable-bg ink-dark">
-          <div class="item item-body item-text-wrap">
 
+          <div class="item item-body item-text-wrap">
             <div class="ink" ng-click="showURL(like.link)">
               <h2 style="color: #B71C1C">{{like.link.title}}</h2>
+
               <p>{{like.link.teasing}}</p>
+
               <p>
                 <b>{{like.link.category}}</b>
               </p>
+
               <p style="color: #B71C1C">
                 <i class="icon ion-thumbsup"></i>&nbsp;<span class="subdued">{{like.cpt}} Like</span>
               </p>
+
               <p>
-                <i class="icon ion-person"></i> partagé par {{like.link.sharedBy}}
+                <i class="icon ion-person"></i> {{like.link.sharedBy}}
               </p>
             </div>
+          </div>
 
-            <div class="item item-divider">
-              <div class="row">
-                <div class="col">
-                  <button ng-click="moveToBiblio(like.link)" class=" button button-fab "><i class="icon ion-archive"></i></button>
-                </div>
+          <div class="item tabs tabs-secondary tabs-icon-left">
+            <a class="tab-item" href="#" on-tap="moveToBiblio(like.link)">
+              <i class="icon ion-archive"></i> Biblio
+            </a>
+          </div>
+          <!--div class="item item-divider">
+            <div class="row">
+              <div class="col">
+                <button ng-click="moveToBiblio(like.link)" class=" button button-fab "><i class="icon ion-archive"></i>
+                </button>
               </div>
             </div>
-
-          </div>
+          </div-->
         </div>
       </div>
-
     </div>
 
-
-    <!--
-            <div class="item card-item" ng-repeat="like in topTen | filter:filter.category | orderBy: '-cpt' ">
-            <div class="card stable-bg ink-dark">
-              <div class="item item-avatar item-text-wrap">
-
-                <div class="ink" ng-click="showURL(like.link)">
-                  <h2>{{like.link.title}}</h2>
-
-                  <p>{{like.link.teasing}}</p>
-
-                  <p>
-                    <b>{{like.link.category}}</b>
-                  </p>
-
-                </div>
-
-                <div class="card-footer">
-                  <div class="text-right">
-                    <button ng-click="moveToBiblio(like.link)" class=" button button-fab"><i class="icon ion-eye"></i></button>
-                  </div>
-                </div>
-
-              </div>
-            </div>
-          </div>
-    -->
   </ion-content>
 </ion-view>

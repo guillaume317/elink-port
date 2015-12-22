@@ -6,7 +6,7 @@
 // 'starter.controllers' is found in controllers.js
 angular.module('starter', ['ionic', 'starter.controllers', 'ionic-material', 'ionMdInput', 'ion-autocomplete', 'ngCordova', 'firebase', 'el1.login', 'el1.gestion', 'el1.truc', 'el1.cercle', 'el1.bibli', 'el1.model', 'el1.services.commun'])
 
-  .run(function($ionicPlatform, Env, UsersManager,  $rootScope, $cordovaNetwork, $cordovaSplashscreen, $cordovaAppVersion, $cordovaDevice, $cordovaStatusbar) {
+  .run(function($ionicPlatform, Env, UsersManager,  $rootScope, $cordovaNetwork, $cordovaSplashscreen, $cordovaAppVersion, $cordovaDevice, $cordovaStatusbar, $ionicLoading, $state) {
 
     $ionicPlatform.ready(function() {
 
@@ -40,6 +40,21 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ionic-material', 'io
       });
 
       $rootScope.myDevice = $cordovaDevice.getPlatform() + " - " + $cordovaDevice.getVersion() + " - " + $cordovaDevice.getModel() + " - " + $cordovaDevice.getUUID();
+
+      $rootScope.showOverlay = function (message) {
+        $ionicLoading.show({
+          template: message
+        });
+      };
+
+      $rootScope.hideOverlay = function () {
+        $ionicLoading.hide();
+      };
+
+      $rootScope.loadTargetState = function(targetState) {
+        $rootScope.showOverlay("Extraction des données en cours...")
+        $state.go(targetState);
+      }
 
       //on masque le spashscreen
       $cordovaSplashscreen.hide();

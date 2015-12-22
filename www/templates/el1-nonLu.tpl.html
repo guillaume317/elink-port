@@ -15,26 +15,39 @@
     </div>
 
     <div class="item card-item" ng-repeat="lien in liens ">
+
       <div class="card stable-bg ink-dark">
 
         <div class="item item-body item-text-wrap">
-
           <div class="ink" ng-click="showURL(lien)">
             <h2 style="color: #B71C1C">{{lien.title}}</h2>
-            <p style="color: #E57373">{{lien.teasing}}</p>
+
+            <p ng-if="lien.teasing && lien.teasing.length>0" style="color: #E57373">{{lien.teasing}}</p>
+
             <p style="color: #E57373"><i>{{lien.url.substring(0, 60)}}</i></p>
           </div>
-
-          <div class="card-footer text-right">
-            <button ng-click="deleteLink(lien)" class="button button-fab "><i class="icon ion-trash-a"></i></button>
-            <button ng-click="moveTo(lien)" class="button button-fab "><i class="icon ion-archive"></i></button>
-            <button ng-show="canShare()" ng-click="share($event, lien)" class="button button-fab "><i
-              class="icon ion-share"></i></button>
-          </div>
-
         </div>
 
+        <div class="item tabs tabs-secondary tabs-icon-left">
+          <a class="tab-item" href="#" on-tap="moveTo(lien)">
+            <i class="icon ion-archive"></i> Biblio
+          </a>
+          <a class="tab-item" href="#" on-tap="deleteLink(lien)">
+            <i class="icon ion-trash-a"></i> Supprimer
+          </a>
+          <a ng-show="canShare()" class="tab-item" href="#" on-tap="share($event, lien)">
+            <i class="icon ion-share"></i> Partager
+          </a>
+        </div>
+        <!--div class="card-footer text-right">
+          <button ng-click="deleteLink(lien)" class="button button-fab "><i class="icon ion-trash-a"></i></button>
+          <button ng-click="moveTo(lien)" class="button button-fab "><i class="icon ion-archive"></i></button>
+          <button ng-show="canShare()" ng-click="share($event, lien)" class="button button-fab "><i
+            class="icon ion-share"></i></button>
+        </div-->
+
       </div>
+
     </div>
 
   </ion-content>

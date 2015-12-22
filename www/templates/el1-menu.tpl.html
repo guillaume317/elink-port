@@ -15,7 +15,7 @@
   </ion-side-menu-content>
   <ion-side-menu side="right">
     <ion-header-bar style="background-color: #EF5350" class="expanded">
-      <span class="avatar motion spin fade" style="background: url('img/logo.png'); background-size: cover;"></span>
+      <span class="avatar motion spin fade" style="background: url('img/logo.jpg'); background-size: cover;"></span>
       <h2>eLink</h2>
     </ion-header-bar>
     <ion-content class="stable-bg has-expanded-header">
@@ -26,19 +26,19 @@
         <ion-item nav-clear menu-close ng-show="userAuthenticated" ng-click="logout()">
           <strong>Logout</strong>
         </ion-item>
-        <ion-item nav-clear menu-close ui-sref="app.bibli-nonLu">
-          <strong>Non Lu</strong><span class="badge badge-assertive">3</span>
+        <ion-item nav-clear menu-close ng-show="userAuthenticated" on-tap="loadTargetState('app.bibli-nonLu')">
+          <strong>Non Lu</strong><span class="badge badge-assertive">{{countNonLu}}</span>
         </ion-item>
-        <ion-item nav-clear menu-close ui-sref="app.bibli-lu">
-          <strong>Biblio</strong><span class="badge badge-assertive">9</span>
+        <ion-item nav-clear menu-close ng-show="userAuthenticated" on-tap="loadTargetState('app.bibli-lu')">
+          <strong>Biblio</strong><span class="badge badge-assertive">{{countBiblio}}</span>
         </ion-item>
-        <ion-item nav-clear menu-close ui-sref="app.cercle-view">
-          <strong>Cercle</strong><span class="badge badge-assertive">12</span>
+        <ion-item nav-clear menu-close  ng-show="userAuthenticated" on-tap="loadTargetState('app.cercle-view')">
+          <strong>Cercle</strong><span class="badge badge-assertive">{{countCercle}}</span>
         </ion-item>
-        <ion-item nav-clear menu-close ui-sref="app.icdc-view">
+        <ion-item nav-clear menu-close ng-show="userAuthenticated" on-tap="loadTargetState('app.icdc-view')">
           <strong>Top Ten</strong>
         </ion-item>
-        <ion-item nav-clear menu-close ui-sref="app.gestion-view">
+        <ion-item nav-clear menu-close  ng-show="userAuthenticated" on-tap="loadTargetState('app.gestion-view')">
           <strong>Gérer mes cercles</strong>
         </ion-item>
       </ion-list>

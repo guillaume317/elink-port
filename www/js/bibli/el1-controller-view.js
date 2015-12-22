@@ -15,6 +15,15 @@
   /**
    */
   function BibliController($log, $scope, $rootScope, $state, LiensService, GestionService, UsersManager, SessionStorage, USERFIREBASEPROFILEKEY, ToastManager, liensNonLus, liensLus, allMyCercles, allCategories, $ionicPopup, $stateParams, $timeout, ionicMaterialInk, ionicMaterialMotion, $cordovaDialogs) {
+
+    //on masque la mire de loading
+    $rootScope.hideOverlay();
+
+    //Pour les badges du menu de droite
+    $rootScope.countNonLu = liensNonLus.length;
+    $rootScope.countBiblio = liensLus.length;
+    $rootScope.countCercle = allMyCercles.length;
+
     $scope.$parent.showHeader();
     $scope.$parent.clearFabs();
     $scope.isExpanded = true;
@@ -105,9 +114,13 @@
       if ($state.current.name === 'app.bibli-nonLu') {
         //Ajout dans biblio
         liensLus.$add(lien);
+        ++$rootScope.countBiblio;
+        --$rootScope.countNonLu;
       } else {
         //Ajout dans non lus
         liensNonLus.$add(lien);
+        ++$rootScope.countNonLu;
+        --$rootScope.countBiblio;
       }
       //Suppression du lien de la liste
       $scope.liens.$remove(lien).then(function() {
