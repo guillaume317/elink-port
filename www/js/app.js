@@ -60,6 +60,8 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ionic-material', 'io
         }
       });
 
+    $rootScope.networkOnLine = true;
+
     var config={
       "backendfirebase": "https://elink.firebaseio.com/"
     };

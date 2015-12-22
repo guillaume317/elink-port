@@ -70,10 +70,10 @@
                 return deferred.promise;
             },
 
-            addUserEmail : function(userEmail) {
-                var deferred = $q.defer();
+            addUserEmail : function(userRef) {
+              var deferred = $q.defer();
 
-                var userEmailRef = ref.child('usersEmail').child(EscapeUtils.escapeEmail(userEmail.email));
+                var userEmailRef = ref.child('usersEmail').child(EscapeUtils.escapeEmail(userRef.email));
                 var userEmail = $firebaseObject(userEmailRef);
 
                 userEmail.$loaded()
@@ -81,7 +81,7 @@
                         if (userEmail.$value) {
                             deferred.resolve(userEmail);
                         } else {
-                            userEmail.$value = userEmail.$id;
+                            userEmail.$value = userRef.$id;
                             userEmail.$save()
                                 .then(function () {
                                     deferred.resolve(userEmail);
@@ -103,7 +103,7 @@
                         var users = [];
                         if (usersEmail.length>0) {
                             usersEmail.forEach(function(user) {
-                                //l'utilisateur connectÈ n'est pas ajoutÈ ‡ la liste
+                                //l'utilisateur connect√© n'est pas ajout√© √† la liste
                                 if (user.$value !== idUserConnected) {
                                     users.push({uid: user.$value, email: EscapeUtils.unescapeEmail(user.$id)});
                                 }
@@ -144,7 +144,7 @@
 
             /**
              *
-             * @param userIndex Utiliosateur connectÈ
+             * @param userIndex Utiliosateur connect√©
              * @param cercleName
              * @returns {*|a}
              */
@@ -167,9 +167,9 @@
             },
 
             /**
-             * CrÈation association utilisateur -> cercles
-             * @param userIndex Utilisateur connectÈ
-             * @param cercleName nom du cercle ‡ ajouter
+             * Cr√©ation association utilisateur -> cercles
+             * @param userIndex Utilisateur connect√©
+             * @param cercleName nom du cercle √† ajouter
              */
             addCercle: function (username, cerclename) {
 

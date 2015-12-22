@@ -8,13 +8,13 @@
       'mesInvitations', 'personnesDuCercle', 'mesCercles', 'usersEmail',
       'SessionStorage', 'USERFIREBASEPROFILEKEY', 'ToastManager', 'Loader',
       '$ionicPopup',
-      'ionicMaterialInk', 'ionicMaterialMotion',
+      'ionicMaterialInk', 'ionicMaterialMotion', '$ionicModal',
       GestionController
     ]);
 
   /**
    */
-  function GestionController($log, $scope, $rootScope, $q, $timeout, GestionService, UsersManager, commonsService, mesInvitations, personnesDuCercle, mesCercles, usersEmail, SessionStorage, USERFIREBASEPROFILEKEY, ToastManager, Loader, $ionicPopup, ionicMaterialInk, ionicMaterialMotion) {
+  function GestionController($log, $scope, $rootScope, $q, $timeout, GestionService, UsersManager, commonsService, mesInvitations, personnesDuCercle, mesCercles, usersEmail, SessionStorage, USERFIREBASEPROFILEKEY, ToastManager, Loader, $ionicPopup, ionicMaterialInk, ionicMaterialMotion, $ionicModal) {
 
     //on masque la mire de loading
     Loader.hide();
@@ -87,6 +87,37 @@
         "selectedCercle": mesCercles[0]
       };
     }
+
+    $scope.currentCercle = {"label" : "", "description": ""};
+    $scope.message = "";
+
+    $ionicModal.fromTemplateUrl('templates/el1-nouveauCercle.tpl.html', {
+      scope: $scope,
+      animation: 'slide-in-up'
+    }).then(function (modal) {
+      $scope.newCercleModal = modal;
+    });
+
+    $scope.cancelCercle = function() {
+      $scope.newCercleModal.hide();
+      $scope.currentCercle = {"label" : "", "description": ""};
+    };
+
+    $scope.addCercle = function() {
+      GestionService.createCercle($scope.currentCercle)
+        .then(function (cerclename) {
+          $scope.newCercleModal.hide();
+          $scope.recount();
+          ToastManager.displayToast('Le cercle ' + cerclename + ' a été créé.');
+        })
+        .catch(function (error) {
+          $scope.message = "Erreur lors de la sauvegarde du cercle !";
+          $log.error(error);
+        })
+        .finally(function() {
+          $scope.currentCercle = {"label" : "", "description": ""};
+        })
+    };
 
     $scope.nouveauCercle = function (ev) {
       $scope.currentCercle = {};
