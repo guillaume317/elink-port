@@ -7,14 +7,14 @@
       'LiensService', 'GestionService', 'UsersManager', 'SessionStorage', 'USERFIREBASEPROFILEKEY', 'ToastManager', 'Loader',
       'liensNonLus', 'liensLus', 'allMyCercles', 'allCategories',
       '$ionicPopup',
-      '$stateParams', '$timeout', 'ionicMaterialInk', 'ionicMaterialMotion', '$cordovaDialogs',
+      '$stateParams', '$timeout', 'ionicMaterialInk', 'ionicMaterialMotion', '$ionicModal', '$cordovaDialogs',
       BibliController
     ]);
 
 
   /**
    */
-  function BibliController($log, $scope, $rootScope, $state, LiensService, GestionService, UsersManager, SessionStorage, USERFIREBASEPROFILEKEY, ToastManager, Loader, liensNonLus, liensLus, allMyCercles, allCategories, $ionicPopup, $stateParams, $timeout, ionicMaterialInk, ionicMaterialMotion, $cordovaDialogs) {
+  function BibliController($log, $scope, $rootScope, $state, LiensService, GestionService, UsersManager, SessionStorage, USERFIREBASEPROFILEKEY, ToastManager, Loader, liensNonLus, liensLus, allMyCercles, allCategories, $ionicPopup, $stateParams, $timeout, ionicMaterialInk, ionicMaterialMotion, $ionicModal, $cordovaDialogs) {
 
     //on masque la mire de loading
     Loader.hide();
@@ -62,6 +62,13 @@
       $scope.liens = liensLus;
     }
 
+    $ionicModal.fromTemplateUrl('templates/el1-share.tpl.html', {
+      scope: $scope,
+      animation: 'slide-in-up'
+    }).then(function (modal) {
+      $scope.shareModal = modal;
+    });
+
     $scope.doRefresh = function () {
       if ($state.current.name === 'app.bibli-nonLu') {
         LiensService.findNotReadLinksByUser(SessionStorage.get(USERFIREBASEPROFILEKEY).uid)
@@ -90,7 +97,6 @@
         });
     };
 
-    //TODO utilisation cordova-plugin-inappbrowser
     $scope.showURL = function (lien) {
       window.open(lien.url, '_system', 'location=yes');
     };
@@ -142,7 +148,8 @@
 
       $scope.categories = allCategories;
       $scope.cercles = allMyCercles;
-      $scope.linkToShare = lien;
+      //On conserve la trace du lien sélectionné pour l'effacer par la suite de la liste
+      $scope.lienSelected = lien;
 
       // on trace l'id original
       var keyOri;
@@ -163,7 +170,29 @@
         keyOri: keyOri
       }
 
-      var myPopup = $ionicPopup.show({
+      $scope.shareModal.show();
+
+    }
+
+    $scope.confirmShare = function() {
+      GestionService.shareLien($scope.shareLink, SessionStorage.get(USERFIREBASEPROFILEKEY))
+        .then(function () {
+          $scope.liens.$remove($scope.lienSelected)
+            .then(function() {
+              $scope.shareModal.hide();
+              $scope.recount();
+              $scope.replayAnimation();
+            });
+        })
+        .catch(function (error) {
+          $log.error(error);
+        })
+        .finally(function() {
+          $scope.lienSelected = null;
+        })
+    }
+
+/**      var myPopup = $ionicPopup.show({
         title: 'Partage',
         templateUrl: 'templates/el1-share.tpl.html',
         scope: $scope,
@@ -200,7 +229,7 @@
         myPopup.close(); //close the popup after 120 seconds
       }, 120000);
     }; // fin scope.share
-
+*/
   }
 
 })();

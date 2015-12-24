@@ -1,35 +1,61 @@
-<form name="currentForm">
-  <div class="list">
+<ion-modal-view>
 
-    <label class="item item-input">
-      <input type="text" ng-model="shareLink.title" placeholder="Titre" required autofocus>
-    </label>
+  <ion-header-bar class="bar-assertive-900">
+    <button class="button button-icon button-clear ion-arrow-left-c" ng-click="cancelLink()">
+    </button>
+    <h1 class="title" style="color: #fff">Partage du lien</h1>
+  </ion-header-bar>
 
-    <label class="item item-input">
-      <textarea name="teasing" rows="5" cols="60"  ng-model="shareLink.teasing" placeholder="Teasing..."></textarea>
-    </label>
+  <ion-content class="padding">
 
-    <label class="item item-input item-select">
-      <div class="input-label">
-        Catégorie
+    <form name="currentForm">
+
+      <div class="list">
+
+        <div class="item" ng-if="message && message.length > 0"><span style="color: #EF5350; font-weight: bold">{{message}}</span></div>
+
+        <label class="item item-input item-stacked-label">
+          <span class="input-label">Titre</span>
+          <input type="text" ng-model="shareLink.title" placeholder="Titre" required>
+        </label>
+
+        <label class="item item-input item-stacked-label">
+          <span class="input-label">Teasing</span>
+          <textarea name="teasing" rows="5" cols="60" ng-model="shareLink.teasing" placeholder="Description"></textarea>
+        </label>
+
+        <label class="item item-input item-select">
+          <div class="input-label">
+            <i class="icon ion-ios-list-outline"></i> Catégorie
+          </div>
+          <select ng-model="shareLink.category">
+            <option ng-repeat="cat in categories" value="{{cat}}">
+              {{cat}}
+            </option>
+          </select>
+        </label>
+
+        <label class="item item-input item-select">
+          <div class="input-label">
+            <i class="icon ion-ios-circle-outline"></i> Cercle
+          </div>
+          <select ng-model="shareLink.cercleName">
+            <option ng-repeat="cercl in cercles" value="{{cercl.$id}}">
+              {{cercl.$id}}
+            </option>
+          </select>
+        </label>
+
+        <div class="item">
+          <button ng-click="shareModal.hide()" class=" button button-raised button-block">Annuler</button>
+        </div>
+        <div class="item">
+          <button ng-click="confirmShare()" class=" button button-block bg-primary" style="color: #fff">
+            <strong>Créer</strong></button>
+        </div>
+
       </div>
-      <select ng-model="shareLink.category">
-        <option ng-repeat="cat in categories" value="{{cat}}">
-          {{cat}}
-        </option>
-      </select>
-    </label>
+    </form>
+  </ion-content>
 
-    <label class="item item-input item-select">
-      <div class="input-label">
-        Cercle
-      </div>
-      <select ng-model="shareLink.cercleName">
-        <option ng-repeat="cercl in cercles" value="{{cercl.$id}}">
-          {{cercl.$id}}
-        </option>
-      </select>
-    </label>
-
-  </div>
-</form>
+</ion-modal-view>

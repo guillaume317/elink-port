@@ -1,4 +1,5 @@
 <ion-side-menus enable-menu-with-back-views="true">
+
   <ion-side-menu-content>
     <ion-nav-bar class="bar-assertive-900"
                  ng-class="{expanded: isExpanded, 'has-header-fab-left': hasHeaderFabLeft, 'has-header-fab-right': hasHeaderFabRight}"
@@ -13,9 +14,10 @@
     <ion-nav-view name="fabContent"></ion-nav-view>
     <ion-nav-view name="menuContent" ng-class="{expanded: isExpanded}"></ion-nav-view>
   </ion-side-menu-content>
+
   <ion-side-menu side="right">
     <ion-header-bar class="app-bg expanded">
-      <span class="avatar motion spin fade" style="background: url('img/logo.jpg'); background-size: cover;"></span>
+      <span class="avatar motion spin fade" style="background: url('img/logo.png'); background-size: cover;"></span>
       <h2>eLink</h2>
     </ion-header-bar>
     <ion-content class="stable-bg has-expanded-header">
@@ -33,7 +35,7 @@
           <strong>Biblio</strong><span class="badge badge-assertive">{{countBiblio}}</span>
         </ion-item>
         <ion-item nav-clear menu-close ng-show="userAuthenticated" on-tap="loadTargetState('app.cercle-view')">
-          <strong>Cercle</strong><span class="badge badge-assertive">{{countCercle}}</span>
+          <strong>Mes cercles</strong><span class="badge badge-assertive">{{countCercle}}</span>
         </ion-item>
         <ion-item nav-clear menu-close ng-show="userAuthenticated" on-tap="loadTargetState('app.icdc-view')">
           <strong>Top Ten</strong>

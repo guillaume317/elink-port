@@ -30,7 +30,7 @@
               <span style="color: #E57373">{{lien.teasing}}</span>
             </div>
             <div>
-              <span style="color: #E57373"><i class="icon ion-link"></i> {{lien.url.substring(0, 60)}}</span>
+              <span style="color: #E57373"><i ng-if="lien.url.length < 30" class="icon ion-link"></i> {{lien.url.substring(0, 60)}}</span>
             </div>
             </p>
           </div>
@@ -47,13 +47,6 @@
             <i class="icon ion-share"></i> Partager
           </a>
         </div>
-
-        <!--div class="card-footer text-right">
-          <button ng-click="deleteLink(lien)" class="button button-fab "><i class="icon ion-trash-a"></i></button>
-          <button ng-click="moveTo(lien)" class="button button-fab "><i class="icon ion-eye"></i></button>
-          <button ng-show="canShare()" ng-click="share($event, lien)" class="button button-fab "><i
-            class="icon ion-share"></i></button>
-        </div-->
 
       </div>
     </div>

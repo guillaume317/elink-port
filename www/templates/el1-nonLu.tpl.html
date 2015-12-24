@@ -24,7 +24,7 @@
 
             <p ng-if="lien.teasing && lien.teasing.length>0" style="color: #E57373">{{lien.teasing}}</p>
 
-            <p style="color: #E57373"><i class="icon ion-link"></i> {{lien.url.substring(0, 60)}}</p>
+            <p style="color: #E57373"><i ng-if="lien.url.length < 30" class="icon ion-link"></i> {{lien.url.substring(0, 60)}}</p>
           </div>
         </div>
 

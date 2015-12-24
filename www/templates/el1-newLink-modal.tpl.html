@@ -3,7 +3,7 @@
   <ion-header-bar class="bar-assertive-900">
     <button class="button button-icon button-clear ion-arrow-left-c" ng-click="cancelLink()">
     </button>
-    <h1 class="title">Nouveau Lien</h1>
+    <h1 class="title" style="color: #fff">Nouveau Lien</h1>
   </ion-header-bar>
 
   <ion-content class="padding">
@@ -12,11 +12,12 @@
 
       <div class="list">
 
-        <div class="item" ng-if="message && message.length > 0"><span style="color: #EF5350; font-weight: bold">{{message}}</span></div>
+        <div class="item" ng-if="message && message.length > 0"><span style="color: #EF5350; font-weight: bold">{{message}}</span>
+        </div>
 
         <label class="item item-input item-stacked-label">
-          <span class="input-label">URL du lien</span>
-          <input name="url" type="url" ng-model="currentLien.url" placeholder="http://" autofocus required>
+          <span class="input-label" style="">URL du lien</span>
+          <input name="url" type="url" ng-model="currentLien.url" placeholder="http://" required>
         </label>
 
         <label class="item item-input item-stacked-label">
@@ -24,24 +25,18 @@
           <input name="text" type="text" ng-model="currentLien.title" placeholder="titre" maxlength="60" required>
         </label>
 
-        <label class="item item-input">
-          A enregistrer dans l'espace :
-          <ion-list>
+        <label class="item">
+          <span class="input-label">A déposer dans : </span>
             <ion-radio ng-model="currentLien.private" ng-value="false">Non Lu</ion-radio>
             <ion-radio ng-model="currentLien.private" ng-value="true">Biblio</ion-radio>
-          </ion-list>
-
         </label>
 
         <div class="item">
-          <div class="row">
-            <div class="col col-50">
-              <button ng-click="cancelLink()" class=" button button-raised button-block">Annuler</button>
-            </div>
-            <div class="col col-50">
-              <button ng-click="addLink()" class=" button button-block bg-primary" style="color: #fff"><strong>Créer</strong></button>
-            </div>
-          </div>
+          <button ng-click="cancelLink()" class=" button button-raised button-block">Annuler</button>
+        </div>
+        <div class="item">
+          <button ng-click="addLink()" class=" button button-block bg-primary" style="color: #fff">
+            <strong>Créer</strong></button>
         </div>
 
       </div>

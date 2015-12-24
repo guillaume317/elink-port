@@ -28,7 +28,6 @@
           }
         },
         'fabContent': {
-          //TODO MG
           template: '<button id="fab-nonlu" on-tap="newLinkModal.show()" class="button button-fab button-fab-bottom-right button-energized-900 flip"><i class="icon ion-plus"></i></button>',
           controller: ['$scope', '$log', '$rootScope', 'LiensService', 'commonsService', 'SessionStorage', 'USERFIREBASEPROFILEKEY', 'ToastManager', '$ionicPopup', '$timeout', '$ionicModal',
             function ($scope, $log, $rootScope, LiensService, commonsService, SessionStorage, USERFIREBASEPROFILEKEY, ToastManager, $ionicPopup, $timeout, $ionicModal) {
@@ -50,7 +49,7 @@
                 } else {
 
                   $scope.currentLien.private = $scope.currentLien.private ? "biblio" : "nonlu";
-                  LiensService.createLinkForUser(nouveauLien, SessionStorage.get(USERFIREBASEPROFILEKEY).uid)
+                  LiensService.createLinkForUser($scope.currentLien, SessionStorage.get(USERFIREBASEPROFILEKEY).uid)
                     .then(function (newLink) {
                       $scope.newLinkModal.hide();
                       ToastManager.displayToast("Le lien a été ajouté dans l'espace courant");
@@ -113,7 +112,6 @@
           }
         },
         'fabContent': {
-          //TODO MG
           template: '<button id="fab-biblio" on-tap="newLinkModal.show()" class="button button-fab button-fab-bottom-right button-energized-900 spin"><i class="icon ion-plus"></i></button>',
           controller: ['$scope', '$log', '$rootScope', 'LiensService', 'commonsService', 'SessionStorage', 'USERFIREBASEPROFILEKEY', 'ToastManager', '$ionicPopup', '$timeout', '$ionicModal',
             function ($scope, $log, $rootScope, LiensService, commonsService, SessionStorage, USERFIREBASEPROFILEKEY, ToastManager, $ionicPopup, $timeout, $ionicModal) {
@@ -135,7 +133,7 @@
                 } else {
 
                   $scope.currentLien.private = $scope.currentLien.private ? "biblio" : "nonlu";
-                  LiensService.createLinkForUser(nouveauLien, SessionStorage.get(USERFIREBASEPROFILEKEY).uid)
+                  LiensService.createLinkForUser($scope.currentLien, SessionStorage.get(USERFIREBASEPROFILEKEY).uid)
                     .then(function (newLink) {
                       $scope.newLinkModal.hide();
                       ToastManager.displayToast("Le lien a été ajouté dans l'espace courant");

@@ -34,7 +34,7 @@ angular.module('starter')
             } else {
 
               $scope.currentLien.private = $scope.currentLien.private ? "biblio" : "nonlu";
-              LiensService.createLinkForUser(nouveauLien, SessionStorage.get(USERFIREBASEPROFILEKEY).uid)
+              LiensService.createLinkForUser($scope.currentLien.private, SessionStorage.get(USERFIREBASEPROFILEKEY).uid)
                 .then(function (newLink) {
                   $scope.newLinkModal.hide();
                   ToastManager.displayToast("Le lien a été ajouté dans l'espace courant");

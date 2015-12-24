@@ -91,7 +91,7 @@
     $scope.currentCercle = {"label" : "", "description": ""};
     $scope.message = "";
 
-    $ionicModal.fromTemplateUrl('templates/el1-nouveauCercle.tpl.html', {
+    $ionicModal.fromTemplateUrl('templates/el1-nouveauCercle-modal.tpl.html', {
       scope: $scope,
       animation: 'slide-in-up'
     }).then(function (modal) {
