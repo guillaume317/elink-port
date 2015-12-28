@@ -69,16 +69,15 @@
       $scope.shareModal = modal;
     });
 
-    $scope.$on('link.addComplete', function(event){
+    //Traitement de l'événement Ajout d'un nouveau lien.
+    // Au départ il est posté par le scope "frère" de la vue "fabContent".
+    //Ce dernier remonte au rootScope qui le renvoit à son tour vers le scope du controller "menuContent"
+    $scope.$on('link.addCompleteFromParent', function(event){
       $scope.replayAnimation();
       $scope.recount();
-      event.stopPropagation();
-    });
-
-    $scope.$on('link.addComplete.b', function(event){
-      $scope.replayAnimation();
-      $scope.recount();
-      event.stopPropagation();
+      $timeout(function() {
+        ToastManager.displayToast("Le lien a été ajouté dans l'espace courant");
+      }, 200)
     });
 
     $scope.doRefresh = function () {
@@ -189,6 +188,7 @@
     }
 
     $scope.confirmShare = function() {
+      Loader.show("Partage en cours...");
       GestionService.shareLien($scope.shareLink, SessionStorage.get(USERFIREBASEPROFILEKEY))
         .then(function () {
           $scope.liens.$remove($scope.lienSelected)
@@ -202,6 +202,7 @@
           $log.error(error);
         })
         .finally(function() {
+          Loader.hide();
           $scope.lienSelected = null;
         })
     }

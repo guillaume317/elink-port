@@ -67,6 +67,11 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ionic-material', 'io
 
     $rootScope.networkOnLine = true;
 
+    $rootScope.$on('link.addComplete', function(event){
+      event.stopPropagation();
+      $rootScope.$broadcast('link.addCompleteFromParent')
+    });
+
     var config={
       "backendfirebase": "https://elink.firebaseio.com/"
     };

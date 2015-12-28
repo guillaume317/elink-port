@@ -29,8 +29,8 @@
         },
         'fabContent': {
           template: '<button id="fab-nonlu" on-tap="newLinkModal.show()" class="button button-fab button-fab-bottom-right button-energized-900 flip"><i class="icon ion-plus"></i></button>',
-          controller: ['$scope', '$log', '$rootScope', 'LiensService', 'commonsService', 'SessionStorage', 'USERFIREBASEPROFILEKEY', 'ToastManager', '$ionicPopup', '$timeout', '$ionicModal',
-            function ($scope, $log, $rootScope, LiensService, commonsService, SessionStorage, USERFIREBASEPROFILEKEY, ToastManager, $ionicPopup, $timeout, $ionicModal) {
+          controller: ['$scope', '$log', '$rootScope', 'LiensService', 'commonsService', 'SessionStorage', 'USERFIREBASEPROFILEKEY', 'ToastManager', '$ionicPopup', '$timeout', '$ionicModal', 'Loader',
+            function ($scope, $log, $rootScope, LiensService, commonsService, SessionStorage, USERFIREBASEPROFILEKEY, ToastManager, $ionicPopup, $timeout, $ionicModal, Loader) {
 
               $scope.currentLien = {"url": "", "title": "", "private": false};
               $scope.message = "";
@@ -48,13 +48,16 @@
                   $scope.message = "Format URL non valide ! ";
                 } else {
 
+                  Loader.show("Création du lien en cours...");
+
                   $scope.currentLien.private = $scope.currentLien.private ? "biblio" : "nonlu";
                   LiensService.createLinkForUser($scope.currentLien, SessionStorage.get(USERFIREBASEPROFILEKEY).uid)
                     .then(function (newLink) {
+                      Loader.hide();
                       $scope.newLinkModal.hide();
-                      ToastManager.displayToast("Le lien a été ajouté dans l'espace courant");
+                      // On envoit un évènement au scope parent (ici rootScope)
+                      // Ce dernier se chargera alors de le propager vers ses enfants (pas de communication de frère à frère)
                       $scope.$emit('link.addComplete');
-                      $scope.$broadcast('link.addComplete.b');
                     })
                     .catch(function (error) {
                       $log.error(error);
@@ -114,10 +117,10 @@
         },
         'fabContent': {
           template: '<button id="fab-biblio" on-tap="newLinkModal.show()" class="button button-fab button-fab-bottom-right button-energized-900 spin"><i class="icon ion-plus"></i></button>',
-          controller: ['$scope', '$log', '$rootScope', 'LiensService', 'commonsService', 'SessionStorage', 'USERFIREBASEPROFILEKEY', 'ToastManager', '$ionicPopup', '$timeout', '$ionicModal',
-            function ($scope, $log, $rootScope, LiensService, commonsService, SessionStorage, USERFIREBASEPROFILEKEY, ToastManager, $ionicPopup, $timeout, $ionicModal) {
+          controller: ['$scope', '$log', '$rootScope', 'LiensService', 'commonsService', 'SessionStorage', 'USERFIREBASEPROFILEKEY', 'ToastManager', '$ionicPopup', '$timeout', '$ionicModal', 'Loader',
+            function ($scope, $log, $rootScope, LiensService, commonsService, SessionStorage, USERFIREBASEPROFILEKEY, ToastManager, $ionicPopup, $timeout, $ionicModal, Loader) {
 
-              $scope.currentLien = {"url": "", "title": "", "private": false};
+              $scope.currentLien = {"url": "", "title": "", "private": true};
               $scope.message = "";
 
               $ionicModal.fromTemplateUrl('templates/el1-newLink-modal.tpl.html', {
@@ -133,19 +136,21 @@
                   $scope.message = "Format URL non valide ! ";
                 } else {
 
+                  Loader.show("Création du lien en cours...");
                   $scope.currentLien.private = $scope.currentLien.private ? "biblio" : "nonlu";
                   LiensService.createLinkForUser($scope.currentLien, SessionStorage.get(USERFIREBASEPROFILEKEY).uid)
                     .then(function (newLink) {
+                      Loader.hide();
                       $scope.newLinkModal.hide();
-                      ToastManager.displayToast("Le lien a été ajouté dans l'espace courant");
+                      // On envoit un évènement au scope parent (ici rootScope)
+                      // Ce dernier se chargera alors de le propager vers ses enfants (pas de communication de frère à frère)
                       $scope.$emit('link.addComplete');
-                      $scope.$broadcast('link.addComplete.b');
                     })
                     .catch(function (error) {
                       $log.error(error);
                     })
                     .finally(function () {
-                      $scope.currentLien = {"url": "", "title": "", "private": false};
+                      $scope.currentLien = {"url": "", "title": "", "private": true};
                       $scope.message = "";
                     })
                 }
