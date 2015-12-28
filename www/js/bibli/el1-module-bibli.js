@@ -53,14 +53,15 @@
                     .then(function (newLink) {
                       $scope.newLinkModal.hide();
                       ToastManager.displayToast("Le lien a été ajouté dans l'espace courant");
-                      $scope.$parent.recount();
-                      $scope.$parent.replayAnimation();
+                      $scope.$emit('link.addComplete');
+                      $scope.$broadcast('link.addComplete.b');
                     })
                     .catch(function (error) {
                       $log.error(error);
                     })
                     .finally(function () {
                       $scope.currentLien = {"url": "", "title": "", "private": false};
+                      $scope.message = "";
                     })
                 }
 
@@ -137,14 +138,15 @@
                     .then(function (newLink) {
                       $scope.newLinkModal.hide();
                       ToastManager.displayToast("Le lien a été ajouté dans l'espace courant");
-                      $scope.$parent.recount();
-                      $scope.$parent.replayAnimation();
+                      $scope.$emit('link.addComplete');
+                      $scope.$broadcast('link.addComplete.b');
                     })
                     .catch(function (error) {
                       $log.error(error);
                     })
                     .finally(function () {
                       $scope.currentLien = {"url": "", "title": "", "private": false};
+                      $scope.message = "";
                     })
                 }
 

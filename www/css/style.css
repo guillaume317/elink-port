@@ -123,9 +123,17 @@ h3, .h3 {
 .item-stacked-label textarea {
   border-bottom-style: solid;
   border-bottom-color: #B71C1C;
+  border-bottom-width: 2px;
 }
 
 .item-stacked-label input {
   border-bottom-style: solid;
   border-bottom-color: #B71C1C;
+  border-bottom-width: 2px;
+}
+
+.item-select select {
+  border-bottom-style: solid;
+  border-bottom-color: #B71C1C;
+  border-bottom-width: 2px;
 }

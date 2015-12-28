@@ -41,9 +41,14 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ionic-material', 'io
 
       $rootScope.myDevice = $cordovaDevice.getPlatform() + " - " + $cordovaDevice.getVersion() + " - " + $cordovaDevice.getModel() + " - " + $cordovaDevice.getUUID();
 
-      $rootScope.loadTargetState = function(targetState) {
-        Loader.show("Extraction des données en cours...")
-        $state.go(targetState);
+      $rootScope.currentTargetState = 'app.bibli-nonLu';
+
+      $rootScope.loadTargetState = function(nextTargetState) {
+        if (nextTargetState !== $rootScope.currentTargetState) {
+          Loader.show("Extraction des données en cours...");
+          $rootScope.currentTargetState = nextTargetState;
+        }
+        $state.go(nextTargetState);
       }
 
       //on masque le spashscreen

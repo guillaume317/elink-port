@@ -69,6 +69,18 @@
       $scope.shareModal = modal;
     });
 
+    $scope.$on('link.addComplete', function(event){
+      $scope.replayAnimation();
+      $scope.recount();
+      event.stopPropagation();
+    });
+
+    $scope.$on('link.addComplete.b', function(event){
+      $scope.replayAnimation();
+      $scope.recount();
+      event.stopPropagation();
+    });
+
     $scope.doRefresh = function () {
       if ($state.current.name === 'app.bibli-nonLu') {
         LiensService.findNotReadLinksByUser(SessionStorage.get(USERFIREBASEPROFILEKEY).uid)
@@ -79,6 +91,7 @@
             // Stop the ion-refresher from spinning
             $scope.$broadcast('scroll.refreshComplete');
             $scope.replayAnimation();
+            $scope.recount();
           });
       } else {
         LiensService.findReadLinksByUser(SessionStorage.get(USERFIREBASEPROFILEKEY).uid)
@@ -89,6 +102,7 @@
             // Stop the ion-refresher from spinning
             $scope.$broadcast('scroll.refreshComplete');
             $scope.replayAnimation();
+            $scope.recount();
           });
       }
       UsersManager.findCerclesByUser(SessionStorage.get(USERFIREBASEPROFILEKEY).uid)
