@@ -65,20 +65,15 @@ select {
 .app-bg {
   background-color: #EF5350;
 }
-.menu-open .force-footer-bar-heigth.expanded {
-  background-color: #EF5350;
-}
 
-.menu-open .bar.bar-header.expanded {
-  background-color: #EF5350;
-}
+/* Menu
+==================================*/
 .menu .bar.bar-header.expanded {
   transition: all .5s ease-in-out;
 }
 
-.menu .avatar {
-  height: 88px;
-  width: 88px;
+.menu-open .bar.bar-header.expanded {
+  background-color: #EF5350;
 }
 
 .menu h2 {
@@ -87,6 +82,15 @@ select {
   left: 16px;
   position: absolute;
   color: white;
+}
+
+.menu .avatar {
+  height: 88px;
+  width: 88px;
+}
+
+.menu.menu-left * {
+  font-weight: bold;
 }
 
 .menu-open .ion-navicon {
@@ -99,6 +103,11 @@ select {
   content: "\f2ca";
 }
 
+.menu-open .force-footer-bar-heigth.expanded {
+  background-color: #EF5350;
+}
+
+
 .input-label {
   z-index: 9 !important;
 }
@@ -109,4 +118,22 @@ select {
 
 h3, .h3 {
   font-size: 16px;
+}
+
+.item-stacked-label textarea {
+  border-bottom-style: solid;
+  border-bottom-color: #B71C1C;
+  border-bottom-width: 2px;
+}
+
+.item-stacked-label input {
+  border-bottom-style: solid;
+  border-bottom-color: #B71C1C;
+  border-bottom-width: 2px;
+}
+
+.item-select select {
+  border-bottom-style: solid;
+  border-bottom-color: #B71C1C;
+  border-bottom-width: 2px;
 }

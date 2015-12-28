@@ -1,7 +1,8 @@
 <ion-view view-title="Biblio">
+
   <ion-content ng-class="{expanded:isExpanded}" class="animate-fade-slide-in">
 
-    <newlink></newlink>
+    <!--newlink></newlink-->
 
     <ion-refresher
       pulling-text="Tirez pour actualiser..."
@@ -21,15 +22,16 @@
 
           <div class="ink" ng-click="showURL(lien)">
             <p>
-              <div>
-                <h2 style="color: #B71C1C">{{lien.title}}</h2>
-              </div>
-              <div ng-if="lien.teasing && lien.teasing.length>0">
-                <span style="color: #E57373">{{lien.teasing}}</span>
-              </div>
-              <div>
-                <span style="color: #E57373"><i>{{lien.url.substring(0, 60)}}</i></span>
-              </div>
+
+            <div>
+              <h2 style="color: #B71C1C">{{lien.title}}</h2>
+            </div>
+            <div ng-if="lien.teasing && lien.teasing.length>0">
+              <span style="color: #E57373">{{lien.teasing}}</span>
+            </div>
+            <div>
+              <span style="color: #E57373"><i ng-if="lien.url.length < 30" class="icon ion-link"></i> {{lien.url.substring(0, 60)}}</span>
+            </div>
             </p>
           </div>
         </div>
@@ -45,13 +47,6 @@
             <i class="icon ion-share"></i> Partager
           </a>
         </div>
-
-        <!--div class="card-footer text-right">
-          <button ng-click="deleteLink(lien)" class="button button-fab "><i class="icon ion-trash-a"></i></button>
-          <button ng-click="moveTo(lien)" class="button button-fab "><i class="icon ion-eye"></i></button>
-          <button ng-show="canShare()" ng-click="share($event, lien)" class="button button-fab "><i
-            class="icon ion-share"></i></button>
-        </div-->
 
       </div>
     </div>

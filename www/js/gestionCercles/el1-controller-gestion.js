@@ -8,13 +8,13 @@
       'mesInvitations', 'personnesDuCercle', 'mesCercles', 'usersEmail',
       'SessionStorage', 'USERFIREBASEPROFILEKEY', 'ToastManager', 'Loader',
       '$ionicPopup',
-      'ionicMaterialInk', 'ionicMaterialMotion',
+      'ionicMaterialInk', 'ionicMaterialMotion', '$ionicModal',
       GestionController
     ]);
 
   /**
    */
-  function GestionController($log, $scope, $rootScope, $q, $timeout, GestionService, UsersManager, commonsService, mesInvitations, personnesDuCercle, mesCercles, usersEmail, SessionStorage, USERFIREBASEPROFILEKEY, ToastManager, Loader, $ionicPopup, ionicMaterialInk, ionicMaterialMotion) {
+  function GestionController($log, $scope, $rootScope, $q, $timeout, GestionService, UsersManager, commonsService, mesInvitations, personnesDuCercle, mesCercles, usersEmail, SessionStorage, USERFIREBASEPROFILEKEY, ToastManager, Loader, $ionicPopup, ionicMaterialInk, ionicMaterialMotion, $ionicModal) {
 
     //on masque la mire de loading
     Loader.hide();
@@ -88,6 +88,52 @@
       };
     }
 
+    $scope.currentCercle = {"label" : "", "description": ""};
+    $scope.message = "";
+
+    $ionicModal.fromTemplateUrl('templates/el1-nouveauCercle-modal.tpl.html', {
+      scope: $scope,
+      animation: 'slide-in-up'
+    }).then(function (modal) {
+      $scope.newCercleModal = modal;
+    });
+
+
+    $scope.displayTheNewCercle = function(cercleName) {
+      for (i=0; i<=$scope.cercles.length; i++) {
+        if ($scope.cercles[i].$id === cercleName) {
+          $scope.data.selectedCercle = $scope.cercles[i];
+          break;
+        }
+      }
+      $scope.changeCercle();
+    };
+
+    $scope.cancelCercle = function() {
+      $scope.newCercleModal.hide();
+      $scope.currentCercle = {"label" : "", "description": ""};
+    };
+
+    $scope.addCercle = function() {
+      Loader.show("Création du cercle en cours...");
+      GestionService.createCercle($scope.currentCercle)
+        .then(function (cerclename) {
+          $scope.newCercleModal.hide();
+          $scope.recount();
+          //On recherche dans la liste des cercles le nouveau cercle puis on affiche les infos
+          ToastManager.displayToast('Le cercle ' + cerclename + ' a été créé.');
+          $scope.displayTheNewCercle(cerclename);
+        })
+        .catch(function (error) {
+          $scope.message = "Erreur lors de la sauvegarde du cercle !";
+          $log.error(error);
+        })
+        .finally(function() {
+          Loader.hide();
+          $scope.currentCercle = {"label" : "", "description": ""};
+        })
+    };
+/**
     $scope.nouveauCercle = function (ev) {
       $scope.currentCercle = {};
       $scope.alerts = [];
@@ -126,7 +172,7 @@
       }, 120000);
 
     }; // fin scope.nouveauCercle
-
+*/
     $scope.changeCercle = function () {
 
       //Changement de cercle

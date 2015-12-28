@@ -8,11 +8,11 @@
       </div>
     </div>
 
-    <div class="List">
+    <!--div class="list"-->
 
       <label class="item item-input item-select">
         <div class="input-label">
-          Catégorie
+          <i class="icon ion-ios-list-outline"></i> Catégorie
         </div>
         <select ng-model="filter.category" ng-change="changeCategory()">
           <option value="">Toutes</option>
@@ -24,7 +24,7 @@
 
       <label class="item item-input item-select">
         <div class="input-label">
-          Cercle
+          <i class="icon ion-ios-circle-outline"></i> Cercle
         </div>
         <select ng-model="data.selectedCercle"
                 ng-change="changeCercle()"
@@ -42,7 +42,7 @@
               <h2 style="color: #B71C1C">{{lien.title}}</h2>
               <p>{{lien.teasing}}</p>
               <p style="color: #B71C1C">
-                <b>{{lien.category}}</b>
+                <strong><i class="icon ion-android-bookmark"></i> </strong> {{lien.category}}
               </p>
               <p>
                 <i class="icon ion-person"></i> {{lien.sharedBy}}
@@ -64,6 +64,6 @@
         </div>
       </div>
 
-    </div>
+    <!--/div-->
   </ion-content>
 </ion-view>

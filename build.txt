@@ -1,0 +1,9 @@
+a. cordova build --release android -- --ant
+
+b. keytool -genkey -v -keystore elink-release-key.keystore -alias elink -keyalg RSA -keysize 2048 -validity 10000
+password
+
+c. jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore elink-release-key.keystore platforms\android\bin\MainActivity-release-unsigned.apk elink
+
+d. set path=c:\Developpement\android-sdk-windows\build-tools\22.0.1;%path%
+e. zipalign -v 4 platforms\android\bin\MainActivity-release-unsigned.apk eLink.apk

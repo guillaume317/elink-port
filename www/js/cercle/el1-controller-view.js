@@ -107,17 +107,26 @@
 
     $scope.$parent.showHeader();
     $scope.$parent.clearFabs();
-    $scope.isExpanded = true;
-    $scope.$parent.setExpanded(true);
-    $scope.$parent.setHeaderFab('right');
+    $scope.$parent.setHeaderFab('left');
+
+    // Delay expansion
+    $timeout(function() {
+      $scope.isExpanded = true;
+      $scope.$parent.setExpanded(true);
+    }, 300);
+
+    // Set Motion
+    ionicMaterialMotion.fadeSlideInRight();
+
 
     $scope.replayAnimation = function() {
       $timeout(function () {
-        ionicMaterialMotion.fadeSlideIn({
-          selector: '.animate-fade-slide-in .item'
-        });
-      }, 500);
+        $scope.isExpanded = true;
+        $scope.$parent.setExpanded(true);
+        ionicMaterialMotion.fadeSlideInRight()
+      }, 300);
     };
+
     // Activate ink for controller
     ionicMaterialInk.displayEffect();
 

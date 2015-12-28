@@ -1,7 +1,7 @@
 <ion-view view-title="Non Lu">
   <ion-content ng-class="{expanded:isExpanded}" class="animate-fade-slide-in">
 
-    <newlink></newlink>
+    <!--newlink></newlink-->
 
     <ion-refresher
       pulling-text="Tirez pour actualiser..."
@@ -24,7 +24,7 @@
 
             <p ng-if="lien.teasing && lien.teasing.length>0" style="color: #E57373">{{lien.teasing}}</p>
 
-            <p style="color: #E57373"><i>{{lien.url.substring(0, 60)}}</i></p>
+            <p style="color: #E57373"><i ng-if="lien.url.length < 30" class="icon ion-link"></i> {{lien.url.substring(0, 60)}}</p>
           </div>
         </div>
 

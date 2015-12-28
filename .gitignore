@@ -6,6 +6,7 @@ node_modules/
 bower_components
 platforms/
 plugins/
+*.keystore
 =======
 # Built application files
 *.apk

@@ -7,14 +7,14 @@
       'LiensService', 'GestionService', 'UsersManager', 'SessionStorage', 'USERFIREBASEPROFILEKEY', 'ToastManager', 'Loader',
       'liensNonLus', 'liensLus', 'allMyCercles', 'allCategories',
       '$ionicPopup',
-      '$stateParams', '$timeout', 'ionicMaterialInk', 'ionicMaterialMotion', '$cordovaDialogs',
+      '$stateParams', '$timeout', 'ionicMaterialInk', 'ionicMaterialMotion', '$ionicModal', '$cordovaDialogs',
       BibliController
     ]);
 
 
   /**
    */
-  function BibliController($log, $scope, $rootScope, $state, LiensService, GestionService, UsersManager, SessionStorage, USERFIREBASEPROFILEKEY, ToastManager, Loader, liensNonLus, liensLus, allMyCercles, allCategories, $ionicPopup, $stateParams, $timeout, ionicMaterialInk, ionicMaterialMotion, $cordovaDialogs) {
+  function BibliController($log, $scope, $rootScope, $state, LiensService, GestionService, UsersManager, SessionStorage, USERFIREBASEPROFILEKEY, ToastManager, Loader, liensNonLus, liensLus, allMyCercles, allCategories, $ionicPopup, $stateParams, $timeout, ionicMaterialInk, ionicMaterialMotion, $ionicModal, $cordovaDialogs) {
 
     //on masque la mire de loading
     Loader.hide();
@@ -34,6 +34,12 @@
     $scope.isExpanded = true;
     $scope.$parent.setExpanded(true);
     $scope.$parent.setHeaderFab('right');
+
+    $timeout(function() {
+      ionicMaterialMotion.fadeSlideIn({
+        selector: '.animate-fade-slide-in .item'
+      });
+    }, 200);
 
     $scope.replayAnimation = function () {
       $timeout(function () {
@@ -56,6 +62,24 @@
       $scope.liens = liensLus;
     }
 
+    $ionicModal.fromTemplateUrl('templates/el1-share.tpl.html', {
+      scope: $scope,
+      animation: 'slide-in-up'
+    }).then(function (modal) {
+      $scope.shareModal = modal;
+    });
+
+    //Traitement de l'événement Ajout d'un nouveau lien.
+    // Au départ il est posté par le scope "frère" de la vue "fabContent".
+    //Ce dernier remonte au rootScope qui le renvoit à son tour vers le scope du controller "menuContent"
+    $scope.$on('link.addCompleteFromParent', function(event){
+      $scope.replayAnimation();
+      $scope.recount();
+      $timeout(function() {
+        ToastManager.displayToast("Le lien a été ajouté dans l'espace courant");
+      }, 200)
+    });
+
     $scope.doRefresh = function () {
       if ($state.current.name === 'app.bibli-nonLu') {
         LiensService.findNotReadLinksByUser(SessionStorage.get(USERFIREBASEPROFILEKEY).uid)
@@ -66,6 +90,7 @@
             // Stop the ion-refresher from spinning
             $scope.$broadcast('scroll.refreshComplete');
             $scope.replayAnimation();
+            $scope.recount();
           });
       } else {
         LiensService.findReadLinksByUser(SessionStorage.get(USERFIREBASEPROFILEKEY).uid)
@@ -76,6 +101,7 @@
             // Stop the ion-refresher from spinning
             $scope.$broadcast('scroll.refreshComplete');
             $scope.replayAnimation();
+            $scope.recount();
           });
       }
       UsersManager.findCerclesByUser(SessionStorage.get(USERFIREBASEPROFILEKEY).uid)
@@ -84,7 +110,6 @@
         });
     };
 
-    //TODO utilisation cordova-plugin-inappbrowser
     $scope.showURL = function (lien) {
       window.open(lien.url, '_system', 'location=yes');
     };
@@ -136,7 +161,8 @@
 
       $scope.categories = allCategories;
       $scope.cercles = allMyCercles;
-      $scope.linkToShare = lien;
+      //On conserve la trace du lien sélectionné pour l'effacer par la suite de la liste
+      $scope.lienSelected = lien;
 
       // on trace l'id original
       var keyOri;
@@ -157,7 +183,31 @@
         keyOri: keyOri
       }
 
-      var myPopup = $ionicPopup.show({
+      $scope.shareModal.show();
+
+    }
+
+    $scope.confirmShare = function() {
+      Loader.show("Partage en cours...");
+      GestionService.shareLien($scope.shareLink, SessionStorage.get(USERFIREBASEPROFILEKEY))
+        .then(function () {
+          $scope.liens.$remove($scope.lienSelected)
+            .then(function() {
+              $scope.shareModal.hide();
+              $scope.recount();
+              $scope.replayAnimation();
+            });
+        })
+        .catch(function (error) {
+          $log.error(error);
+        })
+        .finally(function() {
+          Loader.hide();
+          $scope.lienSelected = null;
+        })
+    }
+
+/**      var myPopup = $ionicPopup.show({
         title: 'Partage',
         templateUrl: 'templates/el1-share.tpl.html',
         scope: $scope,
@@ -194,7 +244,7 @@
         myPopup.close(); //close the popup after 120 seconds
       }, 120000);
     }; // fin scope.share
-
+*/
   }
 
 })();
