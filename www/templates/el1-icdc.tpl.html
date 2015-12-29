@@ -49,8 +49,8 @@
       <div class="item card-item" ng-repeat="like in topTen | filter:filter.category | orderBy: '-cpt' ">
         <div class="card stable-bg ink-dark">
 
-          <div class="item item-body item-text-wrap">
-            <div class="ink" ng-click="showURL(like.link)">
+          <div class="item item-body item-text-wrap ink" ng-click="showURL(like.link)">
+            <!-- div class="ink" ng-click="showURL(like.link)" -->
               <h2 style="color: #B71C1C">{{like.link.title}} (<i class="icon ion-heart"></i> {{like.cpt}})</h2>
 
               <p>{{like.link.teasing}}</p>
@@ -62,7 +62,7 @@
               <p>
                 <i class="icon ion-person"></i> {{like.link.sharedBy}}
               </p>
-            </div>
+            <!--/div-->
           </div>
 
           <div class="item tabs tabs-secondary tabs-icon-left">

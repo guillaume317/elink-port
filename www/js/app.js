@@ -88,7 +88,6 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ionic-material', 'io
 
   .constant('USERFIREBASEPROFILEKEY', 'firebase:session::elink')
 
-
   .config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
 
     // Turn off caching for demo simplicity's sake

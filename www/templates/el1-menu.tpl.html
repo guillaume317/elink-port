@@ -17,8 +17,9 @@
 
   <ion-side-menu side="right">
     <ion-header-bar class="app-bg expanded">
-      <span class="avatar motion spin fade" style="background: url('img/logo.png'); background-size: cover;"></span>
-      <h2>eLink</h2>
+      <span ng-show="!userAuthenticated" class="avatar motion spin fade" style="background: url('img/logo.png'); background-size: cover;"></span>
+      <span ng-show="userAuthenticated" class="avatar motion spin fade" ng-style="{'background-image': 'url(' + user.picture + ')'}"></span>
+      <h2>eLink <span ng-show="userAuthenticated">{{user.firstname}}</span></h2>
     </ion-header-bar>
     <ion-content class="stable-bg has-expanded-header">
       <ion-list>

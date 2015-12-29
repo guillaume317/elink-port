@@ -289,7 +289,6 @@
         // features/feature-01-oauth
         var deferred = $q.defer();
 
-        //TODO Once() function
         var ref = new Firebase(Env.backendfirebase() + "categories");
         var categories = $firebaseArray(ref);
 

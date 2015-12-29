@@ -62,8 +62,10 @@
 
 
     $scope.changeCercle = function () {
+      Loader.show("Extraction des données en cours ...");
       LiensService.findLinksByCerlceName($scope.data.selectedCercle.$id)
         .then(function (links) {
+          Loader.hide();
           $scope.allLiens = links;
           $scope.replayAnimation();
         });
@@ -75,7 +77,7 @@
 
 
     $scope.like = function (alink) {
-      LiensService.addLike($scope.data.selectedCercle.$id, alink.$id)
+      LiensService.addLike($scope.data.selectedCercle.$id, alink, liens)
         .then(function(cercleLinkLike){
           ToastManager.displayToast("Le lien a été liké !");
         });
@@ -117,7 +119,6 @@
 
     // Set Motion
     ionicMaterialMotion.fadeSlideInRight();
-
 
     $scope.replayAnimation = function() {
       $timeout(function () {
@@ -161,7 +162,6 @@
         })
     };
 
-    //TODO in app browser plugin
     $scope.showURL= function(lien) {
       window.open(lien.url, '_blank');
     }

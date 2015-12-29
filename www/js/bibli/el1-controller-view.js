@@ -24,7 +24,7 @@
     $rootScope.countBiblio = liensLus.length;
     $rootScope.countCercle = allMyCercles.length;
 
-    $scope.recount = function() {
+    $scope.recount = function () {
       $rootScope.countNonLu = liensNonLus.length;
       $rootScope.countBiblio = liensLus.length;
     };
@@ -35,7 +35,7 @@
     $scope.$parent.setExpanded(true);
     $scope.$parent.setHeaderFab('right');
 
-    $timeout(function() {
+    $timeout(function () {
       ionicMaterialMotion.fadeSlideIn({
         selector: '.animate-fade-slide-in .item'
       });
@@ -72,10 +72,10 @@
     //Traitement de l'événement Ajout d'un nouveau lien.
     // Au départ il est posté par le scope "frère" de la vue "fabContent".
     //Ce dernier remonte au rootScope qui le renvoit à son tour vers le scope du controller "menuContent"
-    $scope.$on('link.addCompleteFromParent', function(event){
+    $scope.$on('link.addCompleteFromParent', function (event) {
       $scope.replayAnimation();
       $scope.recount();
-      $timeout(function() {
+      $timeout(function () {
         ToastManager.displayToast("Le lien a été ajouté dans l'espace courant");
       }, 200)
     });
@@ -125,6 +125,7 @@
         function (choix) {
           // Choix -> Integer: 0 - no button, 1 - button 1, 2 - button 2
           if (choix === 1) {
+            LiensService.deleteLinkScreen(lien);
             // $scope.liens est synchronisé avec la base
             $scope.liens.$remove(lien).then(function () {
               $scope.recount();
@@ -150,7 +151,7 @@
         liensNonLus.$add(lien);
       }
       //Suppression du lien de la liste
-      $scope.liens.$remove(lien).then(function() {
+      $scope.liens.$remove(lien).then(function () {
         $scope.recount();
         ToastManager.displayToast("Le lien a été déplacé !");
       });
@@ -187,12 +188,12 @@
 
     }
 
-    $scope.confirmShare = function() {
+    $scope.confirmShare = function () {
       Loader.show("Partage en cours...");
       GestionService.shareLien($scope.shareLink, SessionStorage.get(USERFIREBASEPROFILEKEY))
         .then(function () {
           $scope.liens.$remove($scope.lienSelected)
-            .then(function() {
+            .then(function () {
               $scope.shareModal.hide();
               $scope.recount();
               $scope.replayAnimation();
@@ -201,13 +202,13 @@
         .catch(function (error) {
           $log.error(error);
         })
-        .finally(function() {
+        .finally(function () {
           Loader.hide();
           $scope.lienSelected = null;
         })
     }
 
-/**      var myPopup = $ionicPopup.show({
+    /**      var myPopup = $ionicPopup.show({
         title: 'Partage',
         templateUrl: 'templates/el1-share.tpl.html',
         scope: $scope,
@@ -227,7 +228,7 @@
         ]
       });
 
-      myPopup.then(function (shareLink) {
+     myPopup.then(function (shareLink) {
         //Récupération du lien ajouté
         GestionService.shareLien(shareLink, SessionStorage.get(USERFIREBASEPROFILEKEY))
           .then(function () {
@@ -240,11 +241,11 @@
         })
       });
 
-      $timeout(function () {
+     $timeout(function () {
         myPopup.close(); //close the popup after 120 seconds
       }, 120000);
-    }; // fin scope.share
-*/
+     }; // fin scope.share
+     */
   }
 
 })();

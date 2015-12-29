@@ -73,9 +73,16 @@ angular.module('el1.login', ['ionic', 'ionic-material', 'ionMdInput', 'el1.servi
         .then(function (authData) {
           return UsersManager.addUser(authData);
         })
+        .then(function(userConnected) {
+          return UsersManager.addUserEmail(userConnected);
+        })
+        .then(function(userConnected) {
+          return UsersManager.getUser(userConnected.$value);
+        })
         .then(function (userConnected) {
           $rootScope.userAuthenticated = true;
-          $rootScope.userEmail = userConnected.email;
+          //$rootScope.userEmail = userConnected.email;
+          $rootScope.user = userConnected;
           return $q.when(userConnected);
         })
         .then(function (userConnected) {
