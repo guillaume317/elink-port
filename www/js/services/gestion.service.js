@@ -23,9 +23,7 @@
           if (cercle.$value !== null) {
             deferred.reject(new Error("le cercle existe déjà !"));
           } else {
-
             cercle.user = username;
-            //cercle.created = new Date().getTime();
             cercle.created = Firebase.ServerValue.TIMESTAMP;
             cercle.description = cercleDescription;
 
@@ -68,11 +66,9 @@
         });
 
       return deferred.promise;
-
     }
 
     function getCercleUsers(usersIndex) {
-
       var promises = [];
 
       angular.forEach(usersIndex,  function(userIndex, index) {
@@ -81,8 +77,6 @@
 
       return $q.all(promises);
     }
-
-
 
     return {
       createCercle : function (aCercleModel) {
@@ -128,7 +122,6 @@
           });
 
         return deferred.promise;
-
       },
 
       shareLien : function(shareLink, userConnected) {
@@ -148,6 +141,7 @@
               url : shareLink.url,
               category: shareLink.category,
               sharedBy: userConnected.google.cachedUserProfile.name,
+              sharedByPicture: userConnected.google.cachedUserProfile.picture,
               keyOri: shareLink.keyOri
             };
             cercleLinksIndex.$add(newCercle)

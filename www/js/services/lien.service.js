@@ -38,7 +38,7 @@
         return deferred.promise;
       },
 
-      getImageForLink : function (lien) {
+      screenshotAndStore : function (lien) {
 
         var deferred = $q.defer();
         var _that = this;
@@ -46,16 +46,17 @@
         config.headers = config.headers || {};
         config.headers.Accept = 'application/json';
 
-        $http.get('https://www.googleapis.com/pagespeedonline/v1/runPagespeed?url=' + newLink.url + '&screenshot=true', config)
+        $http.get('https://www.googleapis.com/pagespeedonline/v1/runPagespeed?url=' + lien.url + '&screenshot=true', config)
           .then(
-          function(data) {
+          function(response) {
+            var data= response.data;
             _that.addLinkScreen(lien.$id, data)
-              .then(function() {
-                deferred.resolve(linkAdded);
+              .then(function(linkScreen) {
+                deferred.resolve(linkScreen);
               })
               .catch (function(error) {
-                deferred.reject(error);
-              })
+              deferred.reject(error);
+            })
           },
           function(error) {
             deferred.reject(error);
@@ -66,20 +67,52 @@
 
       },
 
-      createLinkForUser : function(lien, username) {
+      addLinkScreen: function(linkId, dataScreen){
+        var deferred = $q.defer();
 
+        var linkScreenRef = ref.child('linkScreens').child(linkId);
+        var linkScreen = $firebaseObject(linkScreenRef);
+        linkScreen.$loaded()
+          .then(function () {
+            linkScreen.$value = dataScreen.screenshot.data.replace(/_/g, '/').replace(/-/g, '+');
+            linkScreen.$save();
+            deferred.resolve(linkScreen);
+          }).catch(function (error) {
+            deferred.reject(error);
+          });
+
+        return deferred.promise;
+      },
+
+      deleteLinkScreen: function(link){
+        var linkScreenId;
+        // on ne supprime pas l'image si c'est un clone
+        // car les images ne sont pas dupliquées
+        if (link.clone)
+          return;
+
+        if (link.keyOri)
+          linkScreenId= link.keyOri;
+        else
+          linkScreenId= link.$id;
+
+        if (linkScreenId) {
+          var linkScreenRef = ref.child('linkScreens').child(linkScreenId);
+          if (linkScreenRef)
+            linkScreenRef.remove();
+        }
+      },
+
+      createLinkForUser : function(lien, username) {
         var deferred = $q.defer();
 
         var userLinksRef;
-
         if (lien.private==="biblio") {
           userLinksRef = ref.child('usersLinks').child(username).child('read');
         } else {
           userLinksRef = ref.child('usersLinks').child(username).child('notread');
         }
-
         var userLinks = $firebaseArray(userLinksRef);
-
         userLinks.$loaded()
           .then(function () {
             var newLink = {};
@@ -88,15 +121,23 @@
             newLink.url = lien.url;
             newLink.teasing = "";
 
+            if (lien.keyOri) {
+              newLink.keyOri = lien.keyOri;
+              newLink.clone= "true";
+            } else if (lien.$id) {
+              newLink.keyOri = lien.$id;
+              newLink.clone= "true";
+            }
+
             userLinks.$add(newLink)
               .then(function (linkAdded) {
-                deferred.resolve(linkAdded);
-              })
-          })
-          .catch(function (error) {
+                newLink.$id= linkAdded.key();
+                deferred.resolve(newLink);
+              });
+
+          }).catch(function (error) {
             deferred.reject(error);
           });
-
 
         return deferred.promise;
       },
@@ -169,13 +210,11 @@
           });
 
         return deferred.promise;
-
       },
 
-      addLike : function(cercleName, idLink) {
-
-
+      addLike : function(cercleName, lien, liens) {
         var deferred = $q.defer();
+        var idLink= lien.$id;
 
         // a noter : idLink format K4cGFb8ts5teWMJq4PC
         // Pour le cercle CCMT, on obtient l'identifiant CCMT-K4cGFb8ts5teWMJq4PC
@@ -184,9 +223,15 @@
         var cercleLinkLike = $firebaseObject(cercleLinkLikeRef);
         cercleLinkLike.$loaded()
           .then(function () {
-            cercleLinkLike.$value = cercleLinkLike.$value === null ? 1 : cercleLinkLike.$value + 1;
+            var like= cercleLinkLike.$value === null ? 1 : cercleLinkLike.$value + 1;
+            cercleLinkLike.$value = like;
             cercleLinkLike.$save();
-            deferred.resolve(cercleLinkLike);
+            lien.like= like;
+            liens.$save(lien).then(function () {
+              deferred.resolve(cercleLinkLike);
+            }).catch(function (error) {
+              deferred.reject(error);
+            });
           }).catch(function (error) {
             deferred.reject(error);
           });
@@ -206,28 +251,29 @@
 
           var topTen = [];
 
-          // key[0] : nom du cercle
-          // key[1] : identifiant de l'article'
           snapshot.forEach(function(data) {
 
             // key[0] : nom du cercle
             // key[1] : identifiant de l'article
+            // BUG : identifiant de l'article peut contenir un '-'
             var key = data.key();
-            var keyValue = key.split('-');
             var cptLike = data.val();
 
+            var index= key.indexOf("-");
+            var cercleId= key.substring(0, index);
+            var linkId= key.substring(index);
+
             //jointure avec le lien pour récupérer sa description
-            _that.findLinksByCerlceNameAndIdLink(keyValue[0], '-'+keyValue[1])
+            _that.findLinksByCerlceNameAndIdLink(cercleId, linkId)
               .then(function(aLink){
                 topTen.push(angular.extend({},
                   {
                     link: aLink,
                     cpt: cptLike,
-                    cercleName: keyValue[0]
+                    cercleName: cercleId
                   }
                 ));
               })
-
 
           });
 
@@ -238,29 +284,11 @@
 
       },
 
-      addLinkScreen: function(linkId, dataScreen){
-        var deferred = $q.defer();
-
-        var linkScreenRef = ref.child('linkScreens').child(linkId);
-        var LinkScreen = $firebaseObject(linkScreenRef);
-        LinkScreen.$loaded()
-          .then(function () {
-            LinkScreen.$value = dataScreen.screenshot.data.replace(/_/g, '/').replace(/-/g, '+');
-            LinkScreen.$save();
-            deferred.resolve(LinkScreen);
-          }).catch(function (error) {
-            deferred.reject(error);
-          });
-
-        return deferred.promise;
-      },
-
       /* toutes les catgories */
       findCategories: function () {
         // features/feature-01-oauth
         var deferred = $q.defer();
 
-        //TODO Once() function
         var ref = new Firebase(Env.backendfirebase() + "categories");
         var categories = $firebaseArray(ref);
 
